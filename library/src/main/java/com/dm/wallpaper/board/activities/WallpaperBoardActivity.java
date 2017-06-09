@@ -18,6 +18,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,6 +28,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.LinearLayout;
@@ -48,6 +50,7 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.AboutFragment;
 import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.SettingsFragment;
+import com.dm.wallpaper.board.fragments.WallpaperPagerFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
 import com.dm.wallpaper.board.fragments.dialogs.InAppBillingFragment;
 import com.dm.wallpaper.board.helpers.InAppBillingHelper;
@@ -247,10 +250,12 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         if (requestCode == PermissionCode.STORAGE) {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                WallpapersFragment fragment = (WallpapersFragment) mFragManager
+                WallpaperPagerFragment fragment = (WallpaperPagerFragment) mFragManager
                         .findFragmentByTag(Extras.TAG_WALLPAPERS);
                 if (fragment != null) {
-                    fragment.downloadWallpaper();
+                    Fragment pagerFragment = mFragManager.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+                    if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
+                        ((WallpapersFragment)pagerFragment).downloadWallpaper();
                 }
             } else {
                 Toast.makeText(this, R.string.permission_storage_denied, Toast.LENGTH_LONG).show();
@@ -291,9 +296,13 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                     container.setVisibility(View.VISIBLE);
 
                     if (mFragmentTag.equals(Extras.TAG_WALLPAPERS)) {
-                        WallpapersFragment fragment = (WallpapersFragment)
+                        WallpaperPagerFragment fragment = (WallpaperPagerFragment)
                                 mFragManager.findFragmentByTag(Extras.TAG_WALLPAPERS);
-                        if (fragment != null) fragment.showPopupBubble();
+                        if (fragment != null) {
+                            Fragment pagerFragment = mFragManager.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+                            if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
+                                ((WallpapersFragment)pagerFragment).showPopupBubble();
+                        }
                     }
                     return;
                 }
@@ -527,7 +536,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     private Fragment getFragment(int position) {
         if (position == 0) {
             mFragmentTag = Extras.TAG_WALLPAPERS;
-            return new WallpapersFragment();
+            return new WallpaperPagerFragment();
         } else if (position == 1) {
             mFragmentTag = Extras.TAG_FAVORITES;
             return new FavoritesFragment();

@@ -18,6 +18,7 @@ import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.FilterAdapter;
 import com.dm.wallpaper.board.databases.Database;
+import com.dm.wallpaper.board.fragments.WallpaperPagerFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
 import com.dm.wallpaper.board.items.Category;
 import com.dm.wallpaper.board.utils.Extras;
@@ -111,9 +112,11 @@ public class FilterFragment extends DialogFragment {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         if (fm == null) return;
 
-        WallpapersFragment fragment = (WallpapersFragment) fm.findFragmentByTag(Extras.TAG_WALLPAPERS);
+        WallpaperPagerFragment fragment = (WallpaperPagerFragment) fm.findFragmentByTag(Extras.TAG_WALLPAPERS);
         if (fragment != null) {
-            fragment.filterWallpapers();
+            Fragment pagerFragment = fm.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+            if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
+                ((WallpapersFragment)pagerFragment).filterWallpapers();
         }
 
         if (mGetCategories != null) mGetCategories.cancel(true);
