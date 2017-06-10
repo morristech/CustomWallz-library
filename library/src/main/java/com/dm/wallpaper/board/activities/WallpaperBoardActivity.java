@@ -514,8 +514,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     }
 
     private void setFragment(Fragment fragment) {
-        if (fragment == null)
-            return;
+        if (fragment == null) return;
         clearBackStack();
 
         mAppBar.setExpanded(true);

@@ -30,8 +30,8 @@ public class WallpaperPagerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_wallpaper_pager, container, false);
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
 
-        pagerTag = "android:switcher:" + R.id.viewPager + ":1";
-        viewPager.setAdapter(new WallpaperPagerAdaptor(getChildFragmentManager()));
+        pagerPosition = "android:switcher:" + R.id.viewPager + ":1";
+        viewPager.setAdapter(new MyAdapter(getFragmentManager()));
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {
