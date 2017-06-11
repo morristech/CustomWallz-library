@@ -239,9 +239,13 @@ public class Database extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_CATEGORIES, null, selection, args, null, null, KEY_NAME);
         if (cursor.moveToFirst()) {
             do {
+                String name = cursor.getString(1);
+                if (includeTag != null)
+                    name = name.replace("," + includeTag, "");
+
                 Category category = new Category(
                         cursor.getInt(0),
-                        cursor.getString(1),
+                        name,
                         cursor.getString(2),
                         cursor.getInt(3) == 1,
                         cursor.getInt(4) == 1,
