@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
+import android.util.Log;
 
 import com.danimahardhika.android.helpers.core.TimeHelper;
 import com.dm.wallpaper.board.items.Category;
@@ -253,7 +254,7 @@ public class Database extends SQLiteOpenHelper {
         return count;
     }
 
-    public List<Wallpaper> getFilteredWallpapers() {
+    public List<Wallpaper> getFilteredWallpapers(String includeFilterTags, String excludeFilterTags) {
         List<Wallpaper> wallpapers = new ArrayList<>();
         List<String> selected = getSelectedCategories(false);
         List<String> selection = new ArrayList<>();
@@ -261,12 +262,27 @@ public class Database extends SQLiteOpenHelper {
 
         StringBuilder CONDITION = new StringBuilder();
         for (String item : selected) {
+            if (item.toLowerCase(Locale.getDefault()).equals(includeFilterTags)
+                    || item.toLowerCase(Locale.getDefault()).equals(excludeFilterTags))
+                continue;
+
             if (CONDITION.length() > 0 ) {
                 CONDITION.append(" OR ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             } else {
                 CONDITION.append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             }
             selection.add("%" +item.toLowerCase(Locale.getDefault())+ "%");
+        }
+
+        if (includeFilterTags != null && CONDITION.length() > 0 ) {
+            // IncludeFilterTags is not optional, so unsing AND. It contains only one value.
+            CONDITION.append(" AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
+            selection.add("%" +includeFilterTags.toLowerCase(Locale.getDefault())+ "%");
+            Log.i("GAAAH", "getFilteredWallpapers: Include tags. query = " + CONDITION + " Selection: " + selection.toString());
+        } else if (excludeFilterTags != null && CONDITION.length() > 0) {
+            CONDITION.append(" AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" NOT LIKE ?");
+            selection.add("%" +excludeFilterTags.toLowerCase(Locale.getDefault())+ "%");
+            Log.i("GAAAH", "getFilteredWallpapers: Exclude tags. query = " + CONDITION + " Selection: " + selection.toString());
         }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WALLPAPERS, null, CONDITION.toString(),

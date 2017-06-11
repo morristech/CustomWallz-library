@@ -102,6 +102,14 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
             View shadow = ButterKnife.findById(view, R.id.shadow);
             if (shadow != null) shadow.setVisibility(View.GONE);
         }
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            Log.i("GAAH", "onCreateView: Not null bundle");
+            includeFilterTags = bundle.getString(Extras.INCLUDE_FILTER_TAGS);
+            excludeFilterTags = bundle.getString(Extras.EXCLUDE_FILTER_TAGS);
+            Log.i("GAAH", "onCreateView: include " + includeFilterTags + " exclude " + excludeFilterTags);
+        }
         return view;
     }
 
@@ -156,8 +164,14 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                 SearchListener listener = (SearchListener) getActivity();
                 listener.onSearchExpanded(true);
 
+                Bundle bundle = new Bundle();
+                bundle.putString(Extras.EXCLUDE_FILTER_TAGS, excludeFilterTags);
+                bundle.putString(Extras.INCLUDE_FILTER_TAGS, includeFilterTags);
+                WallpaperSearchFragment wallpaperSearchFragment = new WallpaperSearchFragment();
+                wallpaperSearchFragment.setArguments(bundle);
+
                 FragmentTransaction ft = fm.beginTransaction()
-                        .replace(R.id.container, new WallpaperSearchFragment(),
+                        .replace(R.id.container, wallpaperSearchFragment,
                                 Extras.TAG_WALLPAPER_SEARCH)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack(null);
@@ -227,7 +241,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
 
     public void filterWallpapers() {
         if (mAdapter == null) return;
-        mAdapter.filter();
+        mAdapter.filter(includeFilterTags, excludeFilterTags);
     }
 
     public void downloadWallpaper() {
@@ -266,7 +280,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                         Thread.sleep(1);
                         Database database = Database.get(getActivity());
                         if (!refreshing && database.getWallpapersCount() > 0) {
-                            wallpapers = database.getFilteredWallpapers();
+                            wallpapers = database.getFilteredWallpapers(includeFilterTags, excludeFilterTags);
                             return true;
                         }
 
@@ -306,7 +320,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
 
                                     Preferences.get(getActivity()).setAvailableWallpapersCount(
                                             database.getWallpapersCount());
-                                    wallpapers = database.getFilteredWallpapers();
+                                    wallpapers = database.getFilteredWallpapers(includeFilterTags, excludeFilterTags);
                                     return true;
                                 }
                             }
@@ -316,7 +330,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
 
                             database.addCategories(wallpapersJson.getCategories);
                             database.addWallpapers(wallpapersJson);
-                            wallpapers = database.getFilteredWallpapers();
+                            wallpapers = database.getFilteredWallpapers(includeFilterTags, excludeFilterTags);
                             return true;
                         }
                         return false;

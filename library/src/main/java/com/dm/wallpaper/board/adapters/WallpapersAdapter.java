@@ -332,8 +332,8 @@ public class WallpapersAdapter extends RecyclerView.Adapter<WallpapersAdapter.Vi
                 isFavorite ? R.drawable.ic_toolbar_love : R.drawable.ic_toolbar_unlove, favoriteColor));
     }
 
-    public void filter() {
-        mWallpapers = Database.get(mContext).getFilteredWallpapers();
+    public void filter(String includeFilterTags, String excludeFilterTags) {
+        mWallpapers = Database.get(mContext).getFilteredWallpapers(includeFilterTags, excludeFilterTags);
         notifyDataSetChanged();
     }
 

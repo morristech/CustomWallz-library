@@ -33,6 +33,7 @@ import com.dm.wallpaper.board.adapters.WallpapersAdapter;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
+import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 
@@ -74,6 +75,8 @@ public class WallpaperSearchFragment extends Fragment implements WallpaperListen
     private SearchView mSearchView;
     private WallpapersAdapter mAdapter;
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
+    private String includeFlterTags;
+    private String excludeFlterTags;
 
     @Nullable
     @Override
@@ -84,6 +87,12 @@ public class WallpaperSearchFragment extends Fragment implements WallpaperListen
         if (!Preferences.get(getActivity()).isShadowEnabled()) {
             View shadow = ButterKnife.findById(view, R.id.shadow);
             if (shadow != null) shadow.setVisibility(View.GONE);
+        }
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            includeFlterTags = bundle.getString(Extras.INCLUDE_FILTER_TAGS);
+            excludeFlterTags = bundle.getString(Extras.EXCLUDE_FILTER_TAGS);
         }
         return view;
     }
@@ -196,7 +205,7 @@ public class WallpaperSearchFragment extends Fragment implements WallpaperListen
                 while (!isCancelled()) {
                     try {
                         Thread.sleep(1);
-                        wallpapers = Database.get(getActivity()).getFilteredWallpapers();
+                        wallpapers = Database.get(getActivity()).getFilteredWallpapers(includeFlterTags, excludeFlterTags);
                         return true;
                     } catch (Exception e) {
                         LogUtil.e(Log.getStackTraceString(e));
