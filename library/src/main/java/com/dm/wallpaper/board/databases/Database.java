@@ -259,28 +259,26 @@ public class Database extends SQLiteOpenHelper {
         List<String> selected = getSelectedCategories(false);
         List<String> selection = new ArrayList<>();
         if (selected.size() == 0) return wallpapers;
+        Log.i("GAAAH", "getFilteredWallpapers: include ;" + includeFilterTags + " exclude " + excludeFilterTags);
 
         StringBuilder CONDITION = new StringBuilder();
         for (String item : selected) {
-            if (item.toLowerCase(Locale.getDefault()).equals(includeFilterTags)
-                    || item.toLowerCase(Locale.getDefault()).equals(excludeFilterTags))
-                continue;
 
             if (CONDITION.length() > 0 ) {
                 CONDITION.append(" OR ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             } else {
-                CONDITION.append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
+                CONDITION.append("(LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             }
             selection.add("%" +item.toLowerCase(Locale.getDefault())+ "%");
         }
 
         if (includeFilterTags != null && CONDITION.length() > 0 ) {
             // IncludeFilterTags is not optional, so unsing AND. It contains only one value.
-            CONDITION.append(" AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
+            CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             selection.add("%" +includeFilterTags.toLowerCase(Locale.getDefault())+ "%");
             Log.i("GAAAH", "getFilteredWallpapers: Include tags. query = " + CONDITION + " Selection: " + selection.toString());
         } else if (excludeFilterTags != null && CONDITION.length() > 0) {
-            CONDITION.append(" AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" NOT LIKE ?");
+            CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" NOT LIKE ?");
             selection.add("%" +excludeFilterTags.toLowerCase(Locale.getDefault())+ "%");
             Log.i("GAAAH", "getFilteredWallpapers: Exclude tags. query = " + CONDITION + " Selection: " + selection.toString());
         }
