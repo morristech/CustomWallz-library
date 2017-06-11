@@ -194,7 +194,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_filter) {
-            FilterFragment.showFilterDialog(getActivity().getSupportFragmentManager(), false);
+            FilterFragment.showFilterDialog(getActivity().getSupportFragmentManager(), includeFilterTags, excludeFilterTags, false);
         }
         return super.onOptionsItemSelected(item);
     }
