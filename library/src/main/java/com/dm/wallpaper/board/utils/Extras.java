@@ -18,12 +18,11 @@ package com.dm.wallpaper.board.utils;
  * limitations under the License.
  */
 
-import com.dm.wallpaper.board.R;
-
 public class Extras {
 
     public static final String TAG_WALLPAPERS = "wallpapers";
-    public static final String TAG_WALLPAPERS_PAGER = "android:switcher:" + R.id.viewPager + ":1";
+    public static final String INCLUDE_FILTER_TAGS = "filterIncludeTags";
+    public static final String EXCLUDE_FILTER_TAGS = "filterExcludeTags";
     public static final String TAG_WALLPAPER_SEARCH = "wallpaperSearch";
     public static final String TAG_FAVORITES = "favorites";
     public static final String TAG_SETTINGS = "settings";

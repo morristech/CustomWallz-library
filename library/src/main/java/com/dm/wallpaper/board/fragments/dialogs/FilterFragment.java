@@ -114,7 +114,7 @@ public class FilterFragment extends DialogFragment {
 
         WallpaperPagerFragment fragment = (WallpaperPagerFragment) fm.findFragmentByTag(Extras.TAG_WALLPAPERS);
         if (fragment != null) {
-            Fragment pagerFragment = fm.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+            Fragment pagerFragment = fragment.getCurrentPagerFragment();
             if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
                 ((WallpapersFragment)pagerFragment).filterWallpapers();
         }

@@ -253,7 +253,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                 WallpaperPagerFragment fragment = (WallpaperPagerFragment) mFragManager
                         .findFragmentByTag(Extras.TAG_WALLPAPERS);
                 if (fragment != null) {
-                    Fragment pagerFragment = mFragManager.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+                    Fragment pagerFragment =fragment.getCurrentPagerFragment();
                     if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
                         ((WallpapersFragment)pagerFragment).downloadWallpaper();
                 }
@@ -299,7 +299,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                         WallpaperPagerFragment fragment = (WallpaperPagerFragment)
                                 mFragManager.findFragmentByTag(Extras.TAG_WALLPAPERS);
                         if (fragment != null) {
-                            Fragment pagerFragment = mFragManager.findFragmentByTag(fragment.getCurrentPagerFragmentTag());
+                            Fragment pagerFragment = fragment.getCurrentPagerFragment();
                             if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
                                 ((WallpapersFragment)pagerFragment).showPopupBubble();
                         }

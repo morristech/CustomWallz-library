@@ -89,6 +89,8 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
 
     private WallpapersAdapter mAdapter;
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
+    String includeFilterTags;
+    String excludeFilterTags;
 
     @Nullable
     @Override
