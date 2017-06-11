@@ -2,6 +2,7 @@ package com.dm.wallpaper.board.fragments;
 
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,6 +19,7 @@ public class WallpaperPagerFragment extends Fragment {
 
     private ViewPager viewPager;
     private WallpaperPagerAdaptor adapter;
+    private String [] pagerTitles;
 
     public WallpaperPagerFragment() {
     }
@@ -27,10 +29,15 @@ public class WallpaperPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_wallpaper_pager, container, false);
-        viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-
+        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+        pagerTitles = getResources().getStringArray(R.array.wallpaper_fragment_pager_tab_titles);
         adapter = new WallpaperPagerAdaptor(getChildFragmentManager());
+
+        viewPager = (ViewPager) v.findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
+
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setupWithViewPager(viewPager);
 
         return v;
     }
@@ -42,7 +49,6 @@ public class WallpaperPagerFragment extends Fragment {
     private class WallpaperPagerAdaptor extends FragmentPagerAdapter {
 
         SparseArray<Fragment> fragments = new SparseArray<>();
-        String [] pagerTitles;
 
         WallpaperPagerAdaptor(FragmentManager fm) {
             super(fm);
