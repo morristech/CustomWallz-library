@@ -58,20 +58,15 @@ public class FilterFragment extends DialogFragment {
     private static final String MUZEI = "muzei";
     private static final String TAG = "com.dm.wallpaper.board.dialog.filter";
 
-    private String includeTag;
-    private String excludeTag;
-
-    private static FilterFragment newInstance(String includeTag, String excludeTag, boolean isMuzei) {
+    private static FilterFragment newInstance(boolean isMuzei) {
         FilterFragment fragment = new FilterFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Extras.INCLUDE_FILTER_TAGS, includeTag);
-        bundle.putString(Extras.EXCLUDE_FILTER_TAGS, excludeTag);
         bundle.putBoolean(MUZEI, isMuzei);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static void showFilterDialog(FragmentManager fm, String includeTag, String excludeTag, boolean isMuzei) {
+    public static void showFilterDialog(FragmentManager fm, boolean isMuzei) {
         FragmentTransaction ft = fm.beginTransaction();
         Fragment prev = fm.findFragmentByTag(TAG);
         if (prev != null) {
@@ -79,7 +74,7 @@ public class FilterFragment extends DialogFragment {
         }
 
         try {
-            DialogFragment dialog = FilterFragment.newInstance(includeTag, excludeTag, isMuzei);
+            DialogFragment dialog = FilterFragment.newInstance(isMuzei);
             dialog.show(ft, TAG);
         } catch (IllegalArgumentException | IllegalStateException ignored) {}
     }
@@ -102,8 +97,6 @@ public class FilterFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsMuzei = getArguments().getBoolean(MUZEI);
-        includeTag = getArguments().getString(Extras.INCLUDE_FILTER_TAGS);
-        excludeTag = getArguments().getString(Extras.EXCLUDE_FILTER_TAGS);
     }
 
     @Override
@@ -141,7 +134,7 @@ public class FilterFragment extends DialogFragment {
                     try {
                         Thread.sleep(1);
                         Database database = Database.get(getActivity());
-                        categories = database.getCategories(includeTag, excludeTag);
+                        categories = database.getCategories();
                         for (Category category : categories) {
                             int count = database.getCategoryCount(category.getName());
                             category.setCount(count);

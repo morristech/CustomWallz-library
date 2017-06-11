@@ -59,9 +59,9 @@ public class WallpaperPagerFragment extends Fragment {
             Bundle bundle = new Bundle();
             if (position == 0) {
                 // The first fragment contains only non Animal wallpapers
-                bundle.putString(Extras.INCLUDE_FILTER_TAGS, "art");
+                bundle.putString(Extras.INCLUDE_FILTER_TAGS, "animal");
             } else if (position == 1) {
-                bundle.putString(Extras.EXCLUDE_FILTER_TAGS, "art");
+                bundle.putString(Extras.EXCLUDE_FILTER_TAGS, "animal");
             }
 
             WallpapersFragment fragment = new WallpapersFragment();

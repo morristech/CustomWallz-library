@@ -133,7 +133,7 @@ public class WallpaperBoardMuzeiActivity extends AppCompatActivity implements Vi
         } else if (id == R.id.muzei_wifi_only) {
             mWifiOnlyCheck.setChecked(!mWifiOnlyCheck.isChecked());
         } else if (id == R.id.muzei_select_categories) {
-            FilterFragment.showFilterDialog(getSupportFragmentManager(), null, null, true);
+            FilterFragment.showFilterDialog(getSupportFragmentManager(), true);
         } else if (id == R.id.muzei_save) {
             int rotateTime = TimeHelper.minuteToMilli(mRotateTime);
             if (!mIsMinute) rotateTime = rotateTime * 60;

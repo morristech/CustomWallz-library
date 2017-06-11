@@ -223,20 +223,10 @@ public class Database extends SQLiteOpenHelper {
         return categories;
     }
 
-    public List<Category> getCategories(String includeTag, String excludeTag) {
+    public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = "";
-        String [] args = new String[1];
-        if (includeTag != null) {
-            selection = "LOWER(name) LIKE ?";
-            args[0] = "%" + includeTag + "%";
-        }
-        else if (excludeTag != null) {
-            selection = "LOWER(name) NOT LIKE ?";
-            args[0] = "%" + excludeTag + "%";
-        }
-        Cursor cursor = db.query(TABLE_CATEGORIES, null, selection, args, null, null, KEY_NAME);
+        Cursor cursor = db.query(TABLE_CATEGORIES, null, null, null, null, null, KEY_NAME);
         if (cursor.moveToFirst()) {
             do {
                 Category category = new Category(
