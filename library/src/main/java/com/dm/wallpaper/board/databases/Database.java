@@ -273,7 +273,6 @@ public class Database extends SQLiteOpenHelper {
         List<String> selected = getSelectedCategories(false);
         List<String> selection = new ArrayList<>();
         if (selected.size() == 0) return wallpapers;
-        Log.i("GAAAH", "getFilteredWallpapers: include ;" + includeFilterTags + " exclude " + excludeFilterTags);
 
         StringBuilder CONDITION = new StringBuilder();
         for (String item : selected) {
@@ -290,12 +289,10 @@ public class Database extends SQLiteOpenHelper {
             // IncludeFilterTags is not optional, so unsing AND. It contains only one value.
             CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             selection.add("%" +includeFilterTags.toLowerCase(Locale.getDefault())+ "%");
-            Log.i("GAAAH", "getFilteredWallpapers: Include tags. query = " + CONDITION + " Selection: " + selection.toString());
-        } else if (excludeFilterTags != null && CONDITION.length() > 0) {
+            } else if (excludeFilterTags != null && CONDITION.length() > 0) {
             CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" NOT LIKE ?");
             selection.add("%" +excludeFilterTags.toLowerCase(Locale.getDefault())+ "%");
-            Log.i("GAAAH", "getFilteredWallpapers: Exclude tags. query = " + CONDITION + " Selection: " + selection.toString());
-        }
+            }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WALLPAPERS, null, CONDITION.toString(),
                 selection.toArray(new String[selection.size()]),

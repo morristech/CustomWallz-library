@@ -366,7 +366,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                if (mPosition == 4) {
+                if (mPosition == 3) {
                     mPosition = mLastPosition;
                     mNavigationView.getMenu().getItem(mPosition).setChecked(true);
                     InAppBillingFragment.showInAppBillingDialog(mFragManager,
@@ -401,10 +401,9 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         mNavigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.navigation_view_wallpapers) mPosition = 0;
-            else if (id == R.id.navigation_view_favorites) mPosition = 1;
-            else if (id == R.id.navigation_view_settings) mPosition = 2;
-            else if (id == R.id.navigation_view_about) mPosition = 3;
-            else if (id == R.id.navigation_view_donate) mPosition = 4;
+            else if (id == R.id.navigation_view_settings) mPosition = 1;
+            else if (id == R.id.navigation_view_about) mPosition = 2;
+            else if (id == R.id.navigation_view_donate) mPosition = 3;
 
             item.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -538,12 +537,9 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
             mFragmentTag = Extras.TAG_WALLPAPERS;
             return new WallpaperPagerFragment();
         } else if (position == 1) {
-            mFragmentTag = Extras.TAG_FAVORITES;
-            return new FavoritesFragment();
-        } else if (position == 2) {
             mFragmentTag = Extras.TAG_SETTINGS;
             return new SettingsFragment();
-        } else if (position == 3) {
+        } else if (position == 2) {
             mFragmentTag = Extras.TAG_ABOUT;
             return new AboutFragment();
         }

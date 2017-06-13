@@ -31,13 +31,35 @@ public class WallpaperPagerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_wallpaper_pager, container, false);
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
         pagerTitles = getResources().getStringArray(R.array.wallpaper_fragment_pager_tab_titles);
-        adapter = new WallpaperPagerAdaptor(getChildFragmentManager());
+        FragmentManager fragmentManager = getChildFragmentManager();
+        adapter = new WallpaperPagerAdaptor(fragmentManager);
 
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                try {
+                    ((FavoritesFragment)fragmentManager
+                            .findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position))
+                            .getFavouriteWallpapers();
+                } catch (ClassCastException ignored) {}
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return v;
     }
@@ -63,15 +85,23 @@ public class WallpaperPagerFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             Bundle bundle = new Bundle();
-            if (position == 0) {
-                // The first fragment contains only non Animal wallpapers
-                bundle.putString(Extras.EXCLUDE_FILTER_TAGS, "art");
-            } else if (position == 1) {
-                bundle.putString(Extras.INCLUDE_FILTER_TAGS, "art");
+            Fragment fragment = null;
+            switch(position) {
+                case 0:
+                    bundle.putString(Extras.EXCLUDE_FILTER_TAGS, "art");
+                    fragment = new WallpapersFragment();
+                    fragment.setArguments(bundle);
+                    break;
+                case 1:
+                    bundle.putString(Extras.INCLUDE_FILTER_TAGS, "art");
+                    fragment = new WallpapersFragment();
+                    fragment.setArguments(bundle);
+                    break;
+                case 2:
+                    fragment = new FavoritesFragment();
+                    break;
             }
 
-            WallpapersFragment fragment = new WallpapersFragment();
-            fragment.setArguments(bundle);
             return fragment;
         }
 

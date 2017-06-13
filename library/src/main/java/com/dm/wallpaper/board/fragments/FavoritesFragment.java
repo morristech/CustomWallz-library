@@ -88,7 +88,6 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
                 getActivity().getResources().getInteger(R.integer.wallpapers_column_count)));
         mRecyclerView.setHasFixedSize(false);
 
-        getWallpapers();
     }
 
     @Override
@@ -160,4 +159,9 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
             }
         }.execute();
     }
+
+    public void getFavouriteWallpapers() {
+        getWallpapers();
+    }
+
 }

@@ -105,10 +105,8 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            Log.i("GAAH", "onCreateView: Not null bundle");
             includeFilterTags = bundle.getString(Extras.INCLUDE_FILTER_TAGS);
             excludeFilterTags = bundle.getString(Extras.EXCLUDE_FILTER_TAGS);
-            Log.i("GAAH", "onCreateView: include " + includeFilterTags + " exclude " + excludeFilterTags);
         }
         return view;
     }
