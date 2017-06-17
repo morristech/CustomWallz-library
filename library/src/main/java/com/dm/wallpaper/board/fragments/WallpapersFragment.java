@@ -36,7 +36,6 @@ import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.WallpapersAdapter;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.dialogs.FilterFragment;
-import com.dm.wallpaper.board.helpers.TapIntroHelper;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.items.WallpaperJson;
 import com.dm.wallpaper.board.preferences.Preferences;
@@ -120,7 +119,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
         mProgress.getIndeterminateDrawable().setColorFilter(ColorHelper.getAttributeColor(
                 getActivity(), R.attr.colorAccent), PorterDuff.Mode.SRC_IN);
 
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),
                 getActivity().getResources().getInteger(R.integer.wallpapers_column_count)));
         mRecyclerView.setHasFixedSize(false);
@@ -247,7 +246,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
         mAdapter.downloadLastSelectedWallpaper();
     }
 
-    private void getWallpapers(boolean refreshing) {
+    void getWallpapers(boolean refreshing) {
         final String wallpaperUrl = getActivity().getResources().getString(R.string.wallpaper_json);
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
@@ -260,9 +259,8 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                     mSwipe.setRefreshing(true);
                     WallpaperBoardListener listener = (WallpaperBoardListener) getActivity();
                     listener.onWallpapersChecked(null);
-                } else {
+                } else
                     mProgress.setVisibility(View.VISIBLE);
-                }
 
                 wallpapers = new ArrayList<>();
 
@@ -349,12 +347,6 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                     setHasOptionsMenu(true);
                     mAdapter = new WallpapersAdapter(getActivity(), wallpapers, false, false);
                     mRecyclerView.setAdapter(mAdapter);
-
-                    try {
-                        TapIntroHelper.showWallpapersIntro(getActivity(), mRecyclerView);
-                    } catch (Exception e) {
-                        LogUtil.e(Log.getStackTraceString(e));
-                    }
                 } else {
                     Toast.makeText(getActivity(), R.string.connection_failed, Toast.LENGTH_LONG).show();
                 }

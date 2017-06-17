@@ -48,11 +48,9 @@ public class WallpaperPagerFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                try {
-                    ((FavoritesFragment)fragmentManager
-                            .findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position))
-                            .getFavouriteWallpapers();
-                } catch (ClassCastException ignored) {}
+                Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
+                if (fragment instanceof FavoritesFragment)
+                    ((FavoritesFragment)fragment).getFavouriteWallpapers();
             }
 
             @Override

@@ -41,7 +41,6 @@ import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.WallpapersAdapter;
 import com.dm.wallpaper.board.fragments.dialogs.WallpaperSettingsFragment;
 import com.dm.wallpaper.board.helpers.LocaleHelper;
-import com.dm.wallpaper.board.helpers.TapIntroHelper;
 import com.dm.wallpaper.board.helpers.ViewHelper;
 import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.preferences.Preferences;
@@ -389,11 +388,5 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
         AnimationHelper.show(mFab)
                 .interpolator(new LinearOutSlowInInterpolator())
                 .start();
-
-        try {
-            TapIntroHelper.showWallpaperPreviewIntro(this, mColor);
-        } catch (Exception e) {
-            LogUtil.e(Log.getStackTraceString(e));
-        }
     }
 }

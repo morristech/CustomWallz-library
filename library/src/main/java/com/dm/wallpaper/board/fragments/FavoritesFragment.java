@@ -83,7 +83,7 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
         resetViewBottomPadding(mRecyclerView, true);
         mSwipe.setEnabled(false);
 
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),
                 getActivity().getResources().getInteger(R.integer.wallpapers_column_count)));
         mRecyclerView.setHasFixedSize(false);
@@ -160,7 +160,7 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
         }.execute();
     }
 
-    public void getFavouriteWallpapers() {
+    void getFavouriteWallpapers() {
         getWallpapers();
     }
 

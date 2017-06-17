@@ -46,7 +46,6 @@ import com.dm.wallpaper.board.utils.views.HeaderView;
 import com.kogitune.activitytransition.ActivityTransitionLauncher;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
@@ -111,7 +110,7 @@ public class WallpapersAdapter extends RecyclerView.Adapter<WallpapersAdapter.Vi
         mOptions.showImageForEmptyUri(failed);
         mOptions.showImageOnFail(failed);
         mOptions.showImageOnLoading(loading);
-        mOptions.displayer(new FadeInBitmapDisplayer(700));
+        //mOptions.displayer(new FadeInBitmapDisplayer(700));
     }
 
     @Override

@@ -98,7 +98,6 @@ dependencies {
     compile 'com.google.android.apps.muzei:muzei-api:2.0'
     compile 'com.github.rafakob:DrawMe:0.1.6'
     compile 'org.sufficientlysecure:html-textview:3.2'
-    compile 'com.github.KeepSafe:TapTargetView:1.9.1'
     compile 'com.github.danimahardhika:cafebar:1.1.3'
     compile 'com.github.danimahardhika.android-helpers:core:0.0.5'
     compile 'com.github.danimahardhika.android-helpers:animation:0.0.5'
