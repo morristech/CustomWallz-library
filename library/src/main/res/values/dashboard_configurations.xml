@@ -46,7 +46,7 @@
     <string name="dev_email"></string>
 
     <!-- Wallpaper json link -->
-    <string name="wallpaper_json">https://drive.google.com/uc?id=0B0f4ypHfNKm5ekphR1RZTWVPYWM</string>
+    <string name="wallpaper_json">https://drive.google.com/uc?id=0B7W092jdJDDOcVQyZHN5ek9xdE0</string>
 
     <!-- Allow to download wallpaper
     * If disabled user only able to apply wallpaper from dashboard -->

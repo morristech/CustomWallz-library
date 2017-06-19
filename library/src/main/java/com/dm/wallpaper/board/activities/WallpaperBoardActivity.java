@@ -18,7 +18,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -28,7 +27,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.LinearLayout;
@@ -48,7 +46,6 @@ import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.AboutFragment;
-import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.SettingsFragment;
 import com.dm.wallpaper.board.fragments.WallpaperPagerFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
@@ -109,6 +106,8 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     DrawerLayout mDrawerLayout;
     @BindView(R2.id.appbar)
     AppBarLayout mAppBar;
+    @BindView(R2.id.toolbarBlankLayout)
+    LinearLayout mToolbarBlank;
 
     private BillingProcessor mBillingProcessor;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -150,6 +149,9 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
 
         setSupportActionBar(toolbar);
         ViewHelper.setupToolbar(toolbar);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mToolbarBlank.getLayoutParams();
+        params.height = params.height + WindowHelper.getStatusBarHeight(getApplicationContext());
 
         initNavigationView(toolbar);
         initNavigationViewHeader();

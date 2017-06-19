@@ -14,7 +14,7 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary"
             android:textSize="18sp"
             app:tabIndicatorColor="@color/toolbarIcon"
             app:tabIndicatorHeight="4dp"
