@@ -24,7 +24,6 @@ public class Extras {
     public static final String INCLUDE_FILTER_TAGS = "filterIncludeTags";
     public static final String EXCLUDE_FILTER_TAGS = "filterExcludeTags";
     public static final String TAG_WALLPAPER_SEARCH = "wallpaperSearch";
-    public static final String TAG_FAVORITES = "favorites";
     public static final String TAG_SETTINGS = "settings";
     public static final String TAG_ABOUT = "about";
 

@@ -37,7 +37,8 @@ public class WallpaperPagerFragment extends Fragment {
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabGravity(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -86,12 +87,12 @@ public class WallpaperPagerFragment extends Fragment {
             Fragment fragment = null;
             switch(position) {
                 case 0:
-                    bundle.putString(Extras.EXCLUDE_FILTER_TAGS, "art");
+                    bundle.putString(Extras.EXCLUDE_FILTER_TAGS, getResources().getString(R.string.wallpaper_filter_type_tag));
                     fragment = new WallpapersFragment();
                     fragment.setArguments(bundle);
                     break;
                 case 1:
-                    bundle.putString(Extras.INCLUDE_FILTER_TAGS, "art");
+                    bundle.putString(Extras.INCLUDE_FILTER_TAGS, getResources().getString(R.string.wallpaper_filter_type_tag));
                     fragment = new WallpapersFragment();
                     fragment.setArguments(bundle);
                     break;

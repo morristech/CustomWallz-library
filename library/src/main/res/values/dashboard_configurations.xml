@@ -48,6 +48,11 @@
     <!-- Wallpaper json link -->
     <string name="wallpaper_json">https://drive.google.com/uc?id=0B7W092jdJDDOcVQyZHN5ek9xdE0</string>
 
+    <!-- A tag that each category in the 2nd wallpaper tab has
+    * Categories that have this tag will be shown in the 2nd wallpaper tab
+    * Categories without this tag will be shown in the 1st wallpaper tab -->
+    <string name="wallpaper_filter_type_tag">art</string>
+
     <!-- Allow to download wallpaper
     * If disabled user only able to apply wallpaper from dashboard -->
     <bool name="enable_wallpaper_download">true</bool>
