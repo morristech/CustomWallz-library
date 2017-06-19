@@ -26,6 +26,7 @@ public class Wallpaper {
     private final String mThumbUrl;
     private final String mUrl;
     private String mCategory;
+    private String mPlaylists;
     private boolean mIsFavorite;
 
     public Wallpaper(int id, String name, String author, String thumbUrl, String url, boolean isFavorite) {
@@ -43,6 +44,15 @@ public class Wallpaper {
         mThumbUrl = thumbUrl;
         mUrl = url;
         mCategory = category;
+    }
+
+    public Wallpaper(String name, String author, String thumbUrl, String url, String category, String playlists) {
+        mName = name;
+        mAuthor = author;
+        mThumbUrl = thumbUrl;
+        mUrl = url;
+        mCategory = category;
+        mPlaylists = playlists;
     }
 
     public int getId() {
@@ -69,12 +79,26 @@ public class Wallpaper {
         return mCategory;
     }
 
+    public String getPlaylists() {
+        return mPlaylists;
+    }
+
     public boolean isFavorite() {
         return mIsFavorite;
     }
 
     public void setFavorite(boolean isFavorite) {
         mIsFavorite = isFavorite;
+    }
+
+    public void setPlaylists(String playlists) {
+        mPlaylists = playlists;
+    }
+
+    public void addPlaylist(String playlist) {
+
+        // Intended use: mPlaylists should start with ", ", because it serves as a delimiter
+        mPlaylists = mPlaylists + ", " + playlist;
     }
 
     @Override

@@ -219,6 +219,7 @@ public class WallpapersAdapter extends RecyclerView.Adapter<WallpapersAdapter.Vi
                         intent.putExtra(Extras.EXTRA_URL, mWallpapers.get(position).getUrl());
                         intent.putExtra(Extras.EXTRA_AUTHOR, mWallpapers.get(position).getAuthor());
                         intent.putExtra(Extras.EXTRA_NAME, mWallpapers.get(position).getName());
+                        intent.putExtra(Extras.EXTRA_ID, mWallpapers.get(position).getId());
 
                         ActivityTransitionLauncher.with((AppCompatActivity) mContext)
                                 .from(image, Extras.EXTRA_IMAGE)

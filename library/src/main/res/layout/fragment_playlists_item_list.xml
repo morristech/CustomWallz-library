@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
+    android:id="@+id/playlist_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/dialog_item_padding"
+    android:paddingBottom="@dimen/dialog_item_padding"
+    android:paddingLeft="@dimen/dialog_content_padding"
+    android:paddingStart="@dimen/dialog_content_padding"
+    android:paddingRight="@dimen/dialog_content_padding"
+    android:paddingEnd="@dimen/dialog_content_padding"
+    android:background="?attr/selectableItemBackground"
+    android:theme="@style/ButtonStyle">
+
+    <TextView
+        android:id="@+id/playlists_title"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/content_padding"
+        android:paddingStart="@dimen/content_padding"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/text_content_title"
+        android:textColor="?android:attr/textColorPrimary"
+        fontPath="fonts/Font-Regular.ttf"/>
+
+    <TextView
+        android:id="@+id/playlists_counter"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="@dimen/content_padding"
+        android:layout_marginStart="@dimen/content_padding"
+        android:gravity="center"
+        android:textSize="@dimen/text_content"
+        fontPath="fonts/Font-Medium.ttf"/>
+
+</LinearLayout>

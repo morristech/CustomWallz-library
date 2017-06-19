@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.danimahardhika.android.helpers.core.TimeHelper;
 import com.dm.wallpaper.board.items.Category;
+import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.items.WallpaperJson;
 
@@ -45,6 +46,7 @@ public class Database extends SQLiteOpenHelper {
 
     private static final String TABLE_WALLPAPERS = "wallpapers";
     private static final String TABLE_CATEGORIES = "categories";
+    private static final String TABLE_PLAYLISTS = "playlists";
 
     private static final String KEY_ID = "id";
     private static final String KEY_NAME= "name";
@@ -56,6 +58,8 @@ public class Database extends SQLiteOpenHelper {
     private static final String KEY_SELECTED = "selected";
     private static final String KEY_MUZEI_SELECTED = "muzeiSelected";
     private static final String KEY_ADDED_ON = "addedOn";
+    private static final String KEY_PLAYLIST = "playlist";
+    private static final String KEY_PLAYLIST_COUNT = "count";
 
     @NonNull
     public static Database get(@NonNull Context context) {
@@ -81,12 +85,19 @@ public class Database extends SQLiteOpenHelper {
                 KEY_AUTHOR + " TEXT NOT NULL, " +
                 KEY_THUMB_URL + " TEXT NOT NULL, " +
                 KEY_URL + " TEXT NOT NULL, " +
-                KEY_CATEGORY + " TEXT NOT NULL," +
+                KEY_CATEGORY + " TEXT NOT NULL, " +
                 KEY_FAVORITE + " INTEGER DEFAULT 0," +
                 KEY_ADDED_ON + " TEXT NOT NULL, " +
+                KEY_PLAYLIST + " TEXT, " +
                 "UNIQUE (" +KEY_URL+ ") ON CONFLICT REPLACE)";
+        String CREATE_TABLE_PLAYLISTS = "CREATE TABLE IF NOT EXISTS " +TABLE_PLAYLISTS+ "(" +
+                KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                KEY_NAME+ " TEXT NOT NULL, " +
+                KEY_PLAYLIST_COUNT + " INTEGER, " +
+                "UNIQUE (" +KEY_NAME+ ") ON CONFLICT REPLACE)";
         db.execSQL(CREATE_TABLE_CATEGORY);
         db.execSQL(CREATE_TABLE_WALLPAPER);
+        db.execSQL(CREATE_TABLE_PLAYLISTS);
     }
 
     @Override
@@ -399,6 +410,53 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return wallpapers;
+    }
+
+    public List<PlaylistItem> getPlaylists() {
+        List<PlaylistItem> wallpapers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PLAYLISTS, null, null, null, null, null, KEY_ID);
+        if (cursor.moveToFirst()) {
+            do {
+                PlaylistItem playlistItem = new PlaylistItem(
+                        cursor.getInt(0),
+                        cursor.getString(1));
+                wallpapers.add(playlistItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return wallpapers;
+    }
+
+    public List<Wallpaper> getWallpapersInPlaylist(String playlist) {
+        List<Wallpaper> wallpapers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_PLAYLIST +" = ?", new String[]{playlist},
+                null, null, KEY_ADDED_ON+ " DESC, " +KEY_ID);
+        if (cursor.moveToFirst()) {
+            do {
+                Wallpaper wallpaper = new Wallpaper(
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        cursor.getString(8));
+                wallpapers.add(wallpaper);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return wallpapers;
+    }
+
+    public void putPlaylistItem(int id, String playlists) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_PLAYLIST, playlists);
+        db.update(TABLE_WALLPAPERS, values, KEY_ID +" = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     public void deleteWallpapers(@NonNull List<Wallpaper> wallpapers) {

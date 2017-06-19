@@ -52,6 +52,8 @@ public class WallpaperPagerFragment extends Fragment {
                 Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
                 if (fragment instanceof FavoritesFragment)
                     ((FavoritesFragment)fragment).getFavouriteWallpapers();
+                if (fragment instanceof PlaylistsHolderFragment)
+                    ((PlaylistsHolderFragment)fragment).startPlaylists();
             }
 
             @Override
@@ -99,6 +101,9 @@ public class WallpaperPagerFragment extends Fragment {
                 case 2:
                     fragment = new FavoritesFragment();
                     break;
+
+                case 3:
+                    fragment = new PlaylistsHolderFragment();
             }
 
             return fragment;

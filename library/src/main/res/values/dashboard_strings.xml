@@ -20,6 +20,7 @@
     <string name="menu_filter">Filter</string>
     <string name="menu_save">Save to Device</string>
     <string name="menu_wallpaper_settings">Wallpaper Settings</string>
+    <string name="menu_wallpaper_playlist">Put Wallpaper in a playlist</string>
 
     <!-- Dialog -->
     <string name="open">Open</string>
@@ -52,6 +53,7 @@
     <!-- Wallpapers -->
     <string name="wallpaper_new_added">New Wallpaper</string>
     <string name="wallpaper_filter">Filter by Category</string>
+    <string name="wallpaper_playlist">Add to a playlist</string>
     <string name="wallpaper_downloading">Downloading wallpaper …</string>
     <string name="wallpaper_download_exist">Wallpaper with name %s already exist, do you want to replace it?</string>
     <string name="wallpaper_download_exist_replace">Replace</string>

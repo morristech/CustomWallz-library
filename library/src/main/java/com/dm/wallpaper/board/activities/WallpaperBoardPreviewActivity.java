@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +38,7 @@ import com.danimahardhika.cafebar.CafeBarTheme;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.WallpapersAdapter;
+import com.dm.wallpaper.board.fragments.dialogs.AvailablePlaylistsFragment;
 import com.dm.wallpaper.board.fragments.dialogs.WallpaperSettingsFragment;
 import com.dm.wallpaper.board.helpers.LocaleHelper;
 import com.dm.wallpaper.board.helpers.ViewHelper;
@@ -46,7 +46,6 @@ import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
-import com.dm.wallpaper.board.utils.LogUtil;
 import com.kogitune.activitytransition.ActivityTransition;
 import com.kogitune.activitytransition.ExitActivityTransition;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -99,6 +98,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
     private String mUrl;
     private String mName;
     private String mAuthor;
+    private int mId;
     private int mColor;
     private boolean mIsEnter;
     private boolean mIsResumed = false;
@@ -129,6 +129,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
             mUrl = savedInstanceState.getString(Extras.EXTRA_URL);
             mName = savedInstanceState.getString(Extras.EXTRA_NAME);
             mAuthor = savedInstanceState.getString(Extras.EXTRA_AUTHOR);
+            mId = savedInstanceState.getInt(Extras.EXTRA_ID);
             mIsResumed = savedInstanceState.getBoolean(Extras.EXTRA_RESUMED);
         }
 
@@ -137,6 +138,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
             mUrl = bundle.getString(Extras.EXTRA_URL);
             mName = bundle.getString(Extras.EXTRA_NAME);
             mAuthor = bundle.getString(Extras.EXTRA_AUTHOR);
+            mId = bundle.getInt(Extras.EXTRA_ID);
         }
 
         toolbarTitle.setText(mName);
@@ -301,6 +303,9 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
         } else if (id == R.id.menu_wallpaper_settings) {
             WallpaperSettingsFragment.showWallpaperSettings(getSupportFragmentManager());
             return true;
+        } else if (id == R.id.menu_wallpaper_playlist) {
+            AvailablePlaylistsFragment
+                    .showPlaylistsDialog(getSupportFragmentManager(), mId);
         }
         return super.onOptionsItemSelected(item);
     }
