@@ -1,7 +1,6 @@
 package com.dm.wallpaper.board.fragments.dialogs;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,12 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.danimahardhika.android.helpers.core.ColorHelper;
+import com.danimahardhika.cafebar.CafeBar;
+import com.danimahardhika.cafebar.CafeBarTheme;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.AddToPlaylistAdapter;
@@ -28,7 +29,6 @@ import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -166,6 +166,18 @@ public class AvailablePlaylistsFragment extends DialogFragment {
                     }
                     PlaylistItem playlistItem = (PlaylistItem) mListView.getItemAtPosition(position);
                     database.putWallpaperInPlaylist(mId, playlistItem.getName());
+
+                    CafeBar.builder(getContext())
+                            .theme(new CafeBarTheme.Custom(ColorHelper.getAttributeColor(
+                                    getContext(), R.attr.card_background)))
+                            .fitSystemWindow()
+                            .typeface("Font-Regular.ttf", "Font-Bold.ttf")
+                            .content(String.format(
+                                    getContext().getResources().getString(
+                                            R.string.playlist_wallpaper_added), playlistItem.getName()))
+                            .icon(R.drawable.ic_toolbar_storage)
+                            .show();
+
                     dismiss();
                 });
             } else

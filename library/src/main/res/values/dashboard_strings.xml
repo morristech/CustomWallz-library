@@ -173,5 +173,6 @@
     <string name="playlists_add">Create new playlist</string>
     <string name="playlists_add_hint">New playlist name?</string>
     <string name="playlists_add_prefill"></string>
+    <string name="playlist_wallpaper_added">Wallpaper added to playlist \"%s\"</string>
 
 </resources>
