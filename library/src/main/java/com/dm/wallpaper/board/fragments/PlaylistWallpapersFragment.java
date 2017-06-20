@@ -12,19 +12,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.danimahardhika.android.helpers.core.ColorHelper;
+import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.android.helpers.core.ViewHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
-import com.dm.wallpaper.board.adapters.PlaylistsHolderAdapter;
+import com.dm.wallpaper.board.adapters.WallpapersAdapter;
 import com.dm.wallpaper.board.databases.Database;
-import com.dm.wallpaper.board.items.PlaylistItem;
+import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
+import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
-import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
+import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,25 +53,34 @@ import static com.dm.wallpaper.board.helpers.ViewHelper.resetViewBottomPadding;
  * limitations under the License.
  */
 
-public class PlaylistsHolderFragment extends Fragment {
+public class PlaylistWallpapersFragment extends Fragment implements WallpaperListener {
 
     @BindView(R2.id.recyclerview)
     RecyclerView mRecyclerView;
     @BindView(R2.id.swipe)
     SwipeRefreshLayout mSwipe;
+    @BindView(R2.id.favorite_empty)
+    ImageView mFavoriteEmpty;
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
+    private String mPlaylistName;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_playlists_holder, container, false);
+        View view = inflater.inflate(R.layout.fragment_wallpapers, container, false);
         ButterKnife.bind(this, view);
 
         if (!Preferences.get(getActivity()).isShadowEnabled()) {
             View shadow = ButterKnife.findById(view, R.id.shadow);
             if (shadow != null) shadow.setVisibility(View.GONE);
         }
+
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            mPlaylistName = bundle.getString(Extras.EXTRA_PLAYLIST_NAME);
+
+        getWallpapers();
         return view;
     }
 
@@ -99,15 +111,23 @@ public class PlaylistsHolderFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void getPlaylists() {
+    @Override
+    public void onWallpaperSelected(int position) {
+        if (mRecyclerView == null) return;
+        if (position < 0 || position > mRecyclerView.getAdapter().getItemCount()) return;
+
+        mRecyclerView.scrollToPosition(position);
+    }
+
+    private void getWallpapers() {
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
-            List<PlaylistItem> playlists;
+            List<Wallpaper> wallpapers;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                playlists = new ArrayList<>();
+                wallpapers = new ArrayList<>();
             }
 
             @Override
@@ -115,8 +135,8 @@ public class PlaylistsHolderFragment extends Fragment {
                 while (!isCancelled()) {
                     try {
                         Thread.sleep(1);
-                        playlists = Database.get(getActivity()).getPlaylists();
-                        return !(playlists == null || playlists.size() == 0);
+                        wallpapers = Database.get(getActivity()).getWallpapersInPlaylist(mPlaylistName);
+                        return true;
                     } catch (Exception e) {
                         LogUtil.e(Log.getStackTraceString(e));
                         return false;
@@ -129,16 +149,21 @@ public class PlaylistsHolderFragment extends Fragment {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
-                    Collections.reverse(playlists);
-                    PlaylistWallpapersListener playlistWallpapersListener = (PlaylistWallpapersListener) getActivity();
-                    mRecyclerView.setAdapter(new PlaylistsHolderAdapter(getActivity(), playlists, true, playlistWallpapersListener));
+                    mRecyclerView.setAdapter(new WallpapersAdapter(getActivity(), wallpapers, true, false));
+
+                    if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                        int color = ColorHelper.getAttributeColor(getActivity(),
+                                android.R.attr.textColorSecondary);
+
+                        mFavoriteEmpty.setImageDrawable(
+                                DrawableHelper.getTintedDrawable(getActivity(),
+                                        R.drawable.ic_wallpaper_favorite_empty,
+                                        ColorHelper.setColorAlpha(color, 0.7f)));
+                        mFavoriteEmpty.setVisibility(View.VISIBLE);
+                    }
                 }
                 mGetWallpapers = null;
             }
         }.execute();
-    }
-
-    void startPlaylists() {
-        getPlaylists();
     }
 }

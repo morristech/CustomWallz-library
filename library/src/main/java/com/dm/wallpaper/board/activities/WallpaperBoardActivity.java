@@ -46,12 +46,12 @@ import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.AboutFragment;
+import com.dm.wallpaper.board.fragments.PlaylistWallpapersFragment;
 import com.dm.wallpaper.board.fragments.SettingsFragment;
 import com.dm.wallpaper.board.fragments.WallpaperPagerFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
 import com.dm.wallpaper.board.fragments.dialogs.InAppBillingFragment;
 import com.dm.wallpaper.board.helpers.InAppBillingHelper;
-
 import com.dm.wallpaper.board.helpers.LicenseCallbackHelper;
 import com.dm.wallpaper.board.helpers.LocaleHelper;
 import com.dm.wallpaper.board.items.InAppBilling;
@@ -62,6 +62,7 @@ import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
 import com.dm.wallpaper.board.utils.LogUtil;
 import com.dm.wallpaper.board.utils.listeners.InAppBillingListener;
+import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 import com.dm.wallpaper.board.utils.listeners.SearchListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperBoardListener;
 import com.dm.wallpaper.board.utils.views.HeaderView;
@@ -94,7 +95,7 @@ import static com.dm.wallpaper.board.helpers.ViewHelper.getNavigationViewHeaderS
  */
 
 public class WallpaperBoardActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
-        WallpaperBoardListener, InAppBillingListener, SearchListener {
+        WallpaperBoardListener, InAppBillingListener, SearchListener, PlaylistWallpapersListener {
 
     @BindView(R2.id.toolbar_title)
     TextView mToolbarTitle;
@@ -120,6 +121,8 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     private String[] mDonationProductsId;
 
     public static boolean sRszIoAvailable;
+
+    private boolean playlistInBackstack;
 
     public void initMainActivity(@Nullable Bundle savedInstanceState, boolean isLicenseCheckerEnabled,
                                  @NonNull byte[] salt, @NonNull String licenseKey,
@@ -213,8 +216,13 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         LocaleHelper.setLocale(this);
     }
 
-    @Override
+   @Override
     public void onBackPressed() {
+        if (playlistInBackstack) {
+            playlistInBackstack = false;
+            super.onBackPressed();
+            return;
+        }
         if (mFragManager.getBackStackEntryCount() > 0) {
             clearBackStack();
             return;
@@ -514,8 +522,14 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
 
         mAppBar.setExpanded(true);
 
-        FragmentTransaction ft = mFragManager.beginTransaction().replace(
-                R.id.container, fragment, mFragmentTag);
+        FragmentTransaction ft = mFragManager.beginTransaction()
+                .replace(R.id.container, fragment, mFragmentTag);
+
+        if (fragment instanceof PlaylistWallpapersFragment) {
+            ft.addToBackStack(null);
+            playlistInBackstack = true;
+        }
+
         try {
             ft.commit();
         } catch (Exception e) {
@@ -552,5 +566,14 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
             mFragManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             onSearchExpanded(false);
         }
+    }
+
+    @Override
+    public void onPlaylistSelected(String s) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Extras.EXTRA_PLAYLIST_NAME, s);
+        PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
+        fragment.setArguments(bundle);
+        setFragment(fragment);
     }
 }

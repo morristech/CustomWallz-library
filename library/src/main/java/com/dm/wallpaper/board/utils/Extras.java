@@ -41,6 +41,7 @@ public class Extras {
     public static final String EXTRA_KEY = "key";
     public static final String EXTRA_PRODUCT_ID = "productId";
     public static final String EXTRA_TYPE = "type";
+    public static final String EXTRA_PLAYLIST_NAME= "playlistName";
 
     public static final int TYPE_CONTRIBUTORS = 1;
     public static final int TYPE_DASHBOARD_CONTRIBUTORS = 2;

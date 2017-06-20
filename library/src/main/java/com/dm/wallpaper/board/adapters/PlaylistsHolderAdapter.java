@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -20,11 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.danimahardhika.android.helpers.animation.AnimationHelper;
 import com.danimahardhika.android.helpers.core.ColorHelper;
 import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.cafebar.CafeBar;
@@ -36,13 +31,13 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.WallpaperSearchFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
-import com.dm.wallpaper.board.fragments.dialogs.WallpaperOptionsFragment;
 import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
+import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 import com.dm.wallpaper.board.utils.views.HeaderView;
 import com.kogitune.activitytransition.ActivityTransitionLauncher;
@@ -78,22 +73,22 @@ import static com.dm.wallpaper.board.helpers.DrawableHelper.getDefaultImage;
  * limitations under the License.
  */
 
-public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.ViewHolder> {
+public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolderAdapter.ViewHolder> {
 
     private final Context mContext;
     private final DisplayImageOptions.Builder mOptions;
     private List<PlaylistItem> mPlaylists;
     private List<PlaylistItem> mPlaylistsAll;
+    private PlaylistWallpapersListener mPlaylistWallpapersListener;
 
-    private int mLastSelectedPosition = -1;
     private Database db;
-    public static boolean sIsClickable = true;
 
-    public PlaylistsAdapter(@NonNull Context context, @NonNull List<PlaylistItem> wallpapers,
-                            boolean isSearchMode) {
+    public PlaylistsHolderAdapter(@NonNull Context context, @NonNull List<PlaylistItem> wallpapers,
+                                  boolean isSearchMode, PlaylistWallpapersListener playlistWallpapersListener) {
         mContext = context;
         mPlaylists = wallpapers;
         db = Database.get(mContext);
+        mPlaylistWallpapersListener = playlistWallpapersListener;
 
         if (isSearchMode) {
             mPlaylistsAll = new ArrayList<>();
@@ -210,42 +205,10 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
 
         @Override
         public void onClick(View view) {
-            int id = view.getId();
             int position = getAdapterPosition();
-            if (id == R.id.playlists_container) {
-                if (sIsClickable) {
-                    sIsClickable = false;
-                    try {
-                        final Intent intent = new Intent(mContext, WallpaperBoardPreviewActivity.class);
-                        intent.putExtra(Extras.EXTRA_URL, mPlaylists.get(position).getUrl());
-                        intent.putExtra(Extras.EXTRA_NAME, mPlaylists.get(position).getName());
-
-                        ActivityTransitionLauncher.with((AppCompatActivity) mContext)
-                                .from(image, Extras.EXTRA_IMAGE)
-                                .image(((BitmapDrawable) image.getDrawable()).getBitmap())
-                                .launch(intent);
-                    } catch (Exception e) {
-                        sIsClickable = true;
-                    }
-                }
-            }
+            mPlaylistWallpapersListener.onPlaylistSelected(mPlaylists.get(position).getName());
         }
     }
-
-
-    /*public void filter(String includeFilterTags, String excludeFilterTags) {
-        mPlaylists = Database.get(mContext).getFilteredWallpapers(includeFilterTags, excludeFilterTags);
-        notifyDataSetChanged();
-    }*/
-/*
-    public void downloadLastSelectedWallpaper() {
-        if (mLastSelectedPosition < 0 || mLastSelectedPosition > mPlaylists.size()) return;
-
-        WallpaperHelper.downloadWallpaper(mContext,
-                ColorHelper.getAttributeColor(mContext, R.attr.colorAccent),
-                mPlaylists.get(mLastSelectedPosition).getUrl(),
-                mPlaylists.get(mLastSelectedPosition).getName());
-    }*/
 
     public void search(String string) {
         String query = string.toLowerCase(Locale.getDefault()).trim();
