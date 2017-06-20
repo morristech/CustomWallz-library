@@ -106,8 +106,6 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     DrawerLayout mDrawerLayout;
     @BindView(R2.id.appbar)
     AppBarLayout mAppBar;
-    @BindView(R2.id.toolbarBlankLayout)
-    LinearLayout mToolbarBlank;
 
     private BillingProcessor mBillingProcessor;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -149,10 +147,6 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
 
         setSupportActionBar(toolbar);
         ViewHelper.setupToolbar(toolbar);
-
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mToolbarBlank.getLayoutParams();
-        params.height = params.height + WindowHelper.getStatusBarHeight(getApplicationContext());
-
         initNavigationView(toolbar);
         initNavigationViewHeader();
         initAppBar();

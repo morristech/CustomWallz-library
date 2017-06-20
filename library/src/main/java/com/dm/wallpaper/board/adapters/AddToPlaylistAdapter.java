@@ -3,11 +3,9 @@ package com.dm.wallpaper.board.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danimahardhika.android.helpers.core.ColorHelper;
@@ -15,7 +13,6 @@ import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.databases.Database;
-import com.dm.wallpaper.board.items.Category;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Wallpaper;
 
@@ -91,8 +88,6 @@ public class AddToPlaylistAdapter extends BaseAdapter {
 
     class ViewHolder {
 
-        @BindView(R2.id.playlist_container)
-        LinearLayout container;
         @BindView(R2.id.playlists_title)
         TextView title;
         @BindView(R2.id.playlists_counter)

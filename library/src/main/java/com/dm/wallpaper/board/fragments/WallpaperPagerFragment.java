@@ -11,7 +11,9 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import com.danimahardhika.android.helpers.core.WindowHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.utils.Extras;
 
@@ -19,7 +21,7 @@ public class WallpaperPagerFragment extends Fragment {
 
     private ViewPager viewPager;
     private WallpaperPagerAdaptor adapter;
-    private String [] pagerTitles;
+    private String[] pagerTitles;
 
     public WallpaperPagerFragment() {
     }
@@ -30,6 +32,7 @@ public class WallpaperPagerFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_wallpaper_pager, container, false);
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+        FrameLayout toolbarBlankLayout = (FrameLayout) v.findViewById(R.id.toolbar_blank_layout);
         pagerTitles = getResources().getStringArray(R.array.wallpaper_fragment_pager_tab_titles);
         FragmentManager fragmentManager = getChildFragmentManager();
         adapter = new WallpaperPagerAdaptor(fragmentManager);
@@ -37,7 +40,12 @@ public class WallpaperPagerFragment extends Fragment {
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
-        tabLayout.setTabGravity(TabLayout.MODE_SCROLLABLE);
+
+        ViewGroup.LayoutParams params = toolbarBlankLayout.getLayoutParams();
+        params.height = params.height + WindowHelper.getStatusBarHeight(getContext());
+
+
+        tabLayout.setTabGravity(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -51,9 +59,9 @@ public class WallpaperPagerFragment extends Fragment {
             public void onPageSelected(int position) {
                 Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
                 if (fragment instanceof FavoritesFragment)
-                    ((FavoritesFragment)fragment).getFavouriteWallpapers();
+                    ((FavoritesFragment) fragment).getFavouriteWallpapers();
                 if (fragment instanceof PlaylistsHolderFragment)
-                    ((PlaylistsHolderFragment)fragment).startPlaylists();
+                    ((PlaylistsHolderFragment) fragment).startPlaylists();
             }
 
             @Override
@@ -87,7 +95,7 @@ public class WallpaperPagerFragment extends Fragment {
         public Fragment getItem(int position) {
             Bundle bundle = new Bundle();
             Fragment fragment = null;
-            switch(position) {
+            switch (position) {
                 case 0:
                     bundle.putString(Extras.EXCLUDE_FILTER_TAGS, getResources().getString(R.string.wallpaper_filter_type_tag));
                     fragment = new WallpapersFragment();

@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
-import android.util.Log;
 
 import com.danimahardhika.android.helpers.core.TimeHelper;
 import com.dm.wallpaper.board.items.Category;
@@ -49,7 +48,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_PLAYLISTS = "playlists";
 
     private static final String KEY_ID = "id";
-    private static final String KEY_NAME= "name";
+    private static final String KEY_NAME = "name";
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_URL = "url";
     private static final String KEY_THUMB_URL = "thumbUrl";
@@ -72,16 +71,16 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE_CATEGORY = "CREATE TABLE " +TABLE_CATEGORIES+ "(" +
+        String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORIES + "(" +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 KEY_NAME + " TEXT NOT NULL," +
                 KEY_THUMB_URL + " TEXT, " +
                 KEY_SELECTED + " INTEGER DEFAULT 1," +
                 KEY_MUZEI_SELECTED + " INTEGER DEFAULT 1, " +
-                "UNIQUE (" +KEY_NAME+ ") ON CONFLICT REPLACE)";
-        String CREATE_TABLE_WALLPAPER = "CREATE TABLE IF NOT EXISTS " +TABLE_WALLPAPERS+ "(" +
+                "UNIQUE (" + KEY_NAME + ") ON CONFLICT REPLACE)";
+        String CREATE_TABLE_WALLPAPER = "CREATE TABLE IF NOT EXISTS " + TABLE_WALLPAPERS + "(" +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                KEY_NAME+ " TEXT NOT NULL, " +
+                KEY_NAME + " TEXT NOT NULL, " +
                 KEY_AUTHOR + " TEXT NOT NULL, " +
                 KEY_THUMB_URL + " TEXT NOT NULL, " +
                 KEY_URL + " TEXT NOT NULL, " +
@@ -89,12 +88,12 @@ public class Database extends SQLiteOpenHelper {
                 KEY_FAVORITE + " INTEGER DEFAULT 0," +
                 KEY_ADDED_ON + " TEXT NOT NULL, " +
                 KEY_PLAYLIST + " TEXT, " +
-                "UNIQUE (" +KEY_URL+ ") ON CONFLICT REPLACE)";
-        String CREATE_TABLE_PLAYLISTS = "CREATE TABLE IF NOT EXISTS " +TABLE_PLAYLISTS+ "(" +
+                "UNIQUE (" + KEY_URL + ") ON CONFLICT REPLACE)";
+        String CREATE_TABLE_PLAYLISTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PLAYLISTS + "(" +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                KEY_NAME+ " TEXT NOT NULL, " +
+                KEY_NAME + " TEXT NOT NULL, " +
                 KEY_PLAYLIST_COUNT + " INTEGER, " +
-                "UNIQUE (" +KEY_NAME+ ") ON CONFLICT REPLACE)";
+                "UNIQUE (" + KEY_NAME + ") ON CONFLICT REPLACE)";
         db.execSQL(CREATE_TABLE_CATEGORY);
         db.execSQL(CREATE_TABLE_WALLPAPER);
         db.execSQL(CREATE_TABLE_PLAYLISTS);
@@ -125,14 +124,15 @@ public class Database extends SQLiteOpenHelper {
                 String dropQuery = "DROP TABLE IF EXISTS " + tables.get(i);
                 if (!tables.get(i).equalsIgnoreCase("SQLITE_SEQUENCE"))
                     db.execSQL(dropQuery);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         onCreate(db);
     }
 
     public void addCategories(List<WallpaperJson> categories) {
-        String query = "INSERT INTO " +TABLE_CATEGORIES+ " (" +KEY_NAME+ ","
-                +KEY_THUMB_URL+ ") VALUES (?,?);";
+        String query = "INSERT INTO " + TABLE_CATEGORIES + " (" + KEY_NAME + ","
+                + KEY_THUMB_URL + ") VALUES (?,?);";
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(query);
         db.beginTransaction();
@@ -150,8 +150,8 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public void addWallpapers(@NonNull WallpaperJson wallpaper) {
-        String query = "INSERT INTO " +TABLE_WALLPAPERS+ " (" +KEY_NAME+ "," +KEY_AUTHOR+ "," +KEY_URL+ ","
-                +KEY_THUMB_URL+ "," +KEY_CATEGORY+ "," +KEY_ADDED_ON+ ") VALUES (?,?,?,?,?,?);";
+        String query = "INSERT INTO " + TABLE_WALLPAPERS + " (" + KEY_NAME + "," + KEY_AUTHOR + "," + KEY_URL + ","
+                + KEY_THUMB_URL + "," + KEY_CATEGORY + "," + KEY_ADDED_ON + ") VALUES (?,?,?,?,?,?);";
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(query);
         db.beginTransaction();
@@ -173,8 +173,8 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public void addWallpapers(@NonNull List<Wallpaper> wallpapers) {
-        String query = "INSERT INTO " +TABLE_WALLPAPERS+ " (" +KEY_NAME+ "," +KEY_AUTHOR+ "," +KEY_URL+ ","
-                +KEY_THUMB_URL+ "," +KEY_CATEGORY+ "," +KEY_ADDED_ON+ ") VALUES (?,?,?,?,?,?);";
+        String query = "INSERT INTO " + TABLE_WALLPAPERS + " (" + KEY_NAME + "," + KEY_AUTHOR + "," + KEY_URL + ","
+                + KEY_THUMB_URL + "," + KEY_CATEGORY + "," + KEY_ADDED_ON + ") VALUES (?,?,?,?,?,?);";
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(query);
         db.beginTransaction();
@@ -198,7 +198,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SELECTED, isSelected ? 1 : 0);
-        db.update(TABLE_CATEGORIES, values, KEY_ID +" = ?", new String[]{String.valueOf(id)});
+        db.update(TABLE_CATEGORIES, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
@@ -206,7 +206,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_MUZEI_SELECTED, isSelected ? 1 : 0);
-        db.update(TABLE_CATEGORIES, values, KEY_ID +" = ?", new String[]{String.valueOf(id)});
+        db.update(TABLE_CATEGORIES, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
@@ -214,7 +214,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_FAVORITE, isFavorite ? 1 : 0);
-        db.update(TABLE_WALLPAPERS, values, KEY_ID +" = ?", new String[]{String.valueOf(id)});
+        db.update(TABLE_WALLPAPERS, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
@@ -222,7 +222,7 @@ public class Database extends SQLiteOpenHelper {
         List<String> categories = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String column = isMuzei ? KEY_MUZEI_SELECTED : KEY_SELECTED;
-        Cursor cursor = db.query(TABLE_CATEGORIES, new String[]{KEY_NAME}, column +" = ?",
+        Cursor cursor = db.query(TABLE_CATEGORIES, new String[]{KEY_NAME}, column + " = ?",
                 new String[]{"1"}, null, null, KEY_NAME);
         if (cursor.moveToFirst()) {
             do {
@@ -238,12 +238,11 @@ public class Database extends SQLiteOpenHelper {
         List<Category> categories = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String selection = "";
-        String [] args = new String[1];
+        String[] args = new String[1];
         if (includeTag != null) {
             selection = "LOWER(name) LIKE ?";
             args[0] = "%" + includeTag + "%";
-        }
-        else if (excludeTag != null) {
+        } else if (excludeTag != null) {
             selection = "LOWER(name) NOT LIKE ?";
             args[0] = "%" + excludeTag + "%";
         }
@@ -271,8 +270,8 @@ public class Database extends SQLiteOpenHelper {
 
     public int getCategoryCount(String category) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_WALLPAPERS, null, "LOWER(" +KEY_CATEGORY+ ") LIKE ?",
-                new String[]{"%" +category.toLowerCase(Locale.getDefault())+ "%"}, null, null, null);
+        Cursor cursor = db.query(TABLE_WALLPAPERS, null, "LOWER(" + KEY_CATEGORY + ") LIKE ?",
+                new String[]{"%" + category.toLowerCase(Locale.getDefault()) + "%"}, null, null, null);
         int count = cursor.getCount();
         cursor.close();
         db.close();
@@ -288,26 +287,26 @@ public class Database extends SQLiteOpenHelper {
         StringBuilder CONDITION = new StringBuilder();
         for (String item : selected) {
 
-            if (CONDITION.length() > 0 ) {
+            if (CONDITION.length() > 0) {
                 CONDITION.append(" OR ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             } else {
                 CONDITION.append("(LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             }
-            selection.add("%" +item.toLowerCase(Locale.getDefault())+ "%");
+            selection.add("%" + item.toLowerCase(Locale.getDefault()) + "%");
         }
 
-        if (includeFilterTags != null && CONDITION.length() > 0 ) {
+        if (includeFilterTags != null && CONDITION.length() > 0) {
             // IncludeFilterTags is not optional, so unsing AND. It contains only one value.
             CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
-            selection.add("%" +includeFilterTags.toLowerCase(Locale.getDefault())+ "%");
-            } else if (excludeFilterTags != null && CONDITION.length() > 0) {
+            selection.add("%" + includeFilterTags.toLowerCase(Locale.getDefault()) + "%");
+        } else if (excludeFilterTags != null && CONDITION.length() > 0) {
             CONDITION.append(") AND ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" NOT LIKE ?");
-            selection.add("%" +excludeFilterTags.toLowerCase(Locale.getDefault())+ "%");
-            }
+            selection.add("%" + excludeFilterTags.toLowerCase(Locale.getDefault()) + "%");
+        }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WALLPAPERS, null, CONDITION.toString(),
                 selection.toArray(new String[selection.size()]),
-                null, null, KEY_ADDED_ON+ " DESC, " +KEY_ID);
+                null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(
@@ -329,7 +328,7 @@ public class Database extends SQLiteOpenHelper {
         List<Wallpaper> wallpapers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WALLPAPERS, null, null, null, null, null,
-                KEY_ADDED_ON+ " DESC, " +KEY_ID);
+                KEY_ADDED_ON + " DESC, " + KEY_ID);
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(
@@ -355,17 +354,17 @@ public class Database extends SQLiteOpenHelper {
 
         StringBuilder CONDITION = new StringBuilder();
         for (String item : selected) {
-            if (CONDITION.length() > 0 ) {
+            if (CONDITION.length() > 0) {
                 CONDITION.append(" OR ").append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             } else {
                 CONDITION.append("LOWER(").append(KEY_CATEGORY).append(")").append(" LIKE ?");
             }
-            selection.add("%" +item.toLowerCase(Locale.getDefault())+ "%");
+            selection.add("%" + item.toLowerCase(Locale.getDefault()) + "%");
         }
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WALLPAPERS, null, CONDITION.toString(),
-                    selection.toArray(new String[selection.size()]), null, null, "RANDOM()", "1");
+                selection.toArray(new String[selection.size()]), null, null, "RANDOM()", "1");
         if (cursor.moveToFirst()) {
             do {
                 wallpaper = new Wallpaper(
@@ -393,8 +392,8 @@ public class Database extends SQLiteOpenHelper {
     public List<Wallpaper> getFavoriteWallpapers() {
         List<Wallpaper> wallpapers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_FAVORITE +" = ?",
-                new String[]{"1"}, null, null, KEY_ADDED_ON+ " DESC, " +KEY_ID);
+        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_FAVORITE + " = ?",
+                new String[]{"1"}, null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(
@@ -432,8 +431,8 @@ public class Database extends SQLiteOpenHelper {
     public List<Wallpaper> getWallpapersInPlaylist(String playlist) {
         List<Wallpaper> wallpapers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_PLAYLIST +" = ?", new String[]{playlist},
-                null, null, KEY_ADDED_ON+ " DESC, " +KEY_ID);
+        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_PLAYLIST + " = ?", new String[]{playlist},
+                null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(
@@ -455,14 +454,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_PLAYLIST, playlists);
-        db.update(TABLE_WALLPAPERS, values, KEY_ID +" = ?", new String[]{String.valueOf(id)});
+        db.update(TABLE_WALLPAPERS, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
     public void deleteWallpapers(@NonNull List<Wallpaper> wallpapers) {
         SQLiteDatabase db = this.getWritableDatabase();
         for (int i = 0; i < wallpapers.size(); i++) {
-            db.delete(TABLE_WALLPAPERS, KEY_URL +" = ?",
+            db.delete(TABLE_WALLPAPERS, KEY_URL + " = ?",
                     new String[]{wallpapers.get(i).getUrl()});
         }
         db.close();

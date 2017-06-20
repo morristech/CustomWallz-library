@@ -200,7 +200,6 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
             int id = view.getId();
             int position = getAdapterPosition();
             if (id == R.id.playlists_container) {
-                Log.i("GAAH", "onClick: Playlists container");
                 if (sIsClickable) {
                     sIsClickable = false;
                     try {

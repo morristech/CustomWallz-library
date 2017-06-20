@@ -1,14 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.dm.wallpaper.board.fragments.WallpaperPagerFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.dm.wallpaper.board.fragments.WallpaperPagerFragment">
+
+    <FrameLayout
+        android:id="@+id/toolbar_blank_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_blank_layout">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
@@ -18,10 +26,10 @@
             android:textSize="18sp"
             app:tabIndicatorColor="@color/toolbarIcon"
             app:tabIndicatorHeight="4dp"
-            app:tabPaddingTop="15dp"
             app:tabPaddingBottom="15dp"
-            app:tabTextColor="@color/toolbarIcon"
-            app:tabSelectedTextColor="@color/toolbarIcon"/>
+            app:tabPaddingTop="15dp"
+            app:tabSelectedTextColor="@color/toolbarIcon"
+            app:tabTextColor="@color/toolbarIcon"/>
     </android.support.v4.view.ViewPager>
 
-</FrameLayout>
+</RelativeLayout>
