@@ -16,6 +16,7 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Wallpaper;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,11 +79,11 @@ public class AddToPlaylistAdapter extends BaseAdapter {
         }
 
         PlaylistItem playlistItem = mPlaylists.get(position);
-        holder.title.setText(playlistItem.getName());
-
         List<Wallpaper> wallpapers = db.getWallpapersInPlaylist(playlistItem.getName());
         String count = wallpapers.size() > 99 ? "99+" : String.valueOf(wallpapers.size());
         holder.counter.setText(count);
+        holder.title.setText(playlistItem.getName());
+
         return view;
     }
 

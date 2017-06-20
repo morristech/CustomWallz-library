@@ -277,7 +277,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
                             .fitSystemWindow()
                             .typeface("Font-Regular.ttf", "Font-Bold.ttf")
                             .content(String.format(getResources().getString(R.string.wallpaper_download_exist),
-                                    ("\"" +mName + WallpaperHelper.IMAGE_EXTENSION+ "\"")))
+                                    ("\"" + mName + WallpaperHelper.IMAGE_EXTENSION + "\"")))
                             .icon(R.drawable.ic_toolbar_download)
                             .positiveText(R.string.wallpaper_download_exist_replace)
                             .positiveColor(mColor)
@@ -287,7 +287,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
                             })
                             .negativeText(R.string.wallpaper_download_exist_new)
                             .onNegative(cafeBar -> {
-                                WallpaperHelper.downloadWallpaper(this, mColor, mUrl, mName +"_"+ System.currentTimeMillis());
+                                WallpaperHelper.downloadWallpaper(this, mColor, mUrl, mName + "_" + System.currentTimeMillis());
                                 cafeBar.dismiss();
                             })
                             .show();

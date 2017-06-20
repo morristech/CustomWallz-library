@@ -20,7 +20,9 @@ package com.dm.wallpaper.board.items;
 
 public class PlaylistItem {
 
+    // Only used to check if item is a "create new playlist". Database doesn't use this id
     private final int mId;
+
     private final String mPlaylistName;
     private String mUrl;
 

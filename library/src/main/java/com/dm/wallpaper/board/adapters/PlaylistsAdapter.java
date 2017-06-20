@@ -125,44 +125,45 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
         holder.name.setText(mPlaylists.get(position).getName());
         List<Wallpaper> t = db.getWallpapersInPlaylist(mPlaylists.get(position).getName());
         String url;
-        if (t != null && t.size() > 0) {
+        if (t != null && t.size() > 0)
             url = WallpaperHelper.getThumbnailUrl(mContext, t.get(0).getUrl(), t.get(0).getThumbUrl());
-            mPlaylists.get(position).setUrl(url);
-            ImageLoader.getInstance().displayImage(url, new ImageViewAware(holder.image),
-                    mOptions.build(), ImageConfig.getThumbnailSize(mContext), new SimpleImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-                            super.onLoadingStarted(imageUri, view);
-                            if (Preferences.get(mContext).isColoredWallpapersCard()) {
-                                int vibrant = ColorHelper.getAttributeColor(
-                                        mContext, R.attr.card_background);
-                                holder.card.setCardBackgroundColor(vibrant);
-                                int primary = ColorHelper.getAttributeColor(
-                                        mContext, android.R.attr.textColorPrimary);
-                                holder.name.setTextColor(primary);
-                            }
+        else
+            url = "";
+        mPlaylists.get(position).setUrl(url);
+        ImageLoader.getInstance().displayImage(url, new ImageViewAware(holder.image),
+                mOptions.build(), ImageConfig.getThumbnailSize(mContext), new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                        super.onLoadingStarted(imageUri, view);
+                        if (Preferences.get(mContext).isColoredWallpapersCard()) {
+                            int vibrant = ColorHelper.getAttributeColor(
+                                    mContext, R.attr.card_background);
+                            holder.card.setCardBackgroundColor(vibrant);
+                            int primary = ColorHelper.getAttributeColor(
+                                    mContext, android.R.attr.textColorPrimary);
+                            holder.name.setTextColor(primary);
                         }
+                    }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            super.onLoadingComplete(imageUri, view, loadedImage);
-                            if (Preferences.get(mContext).isColoredWallpapersCard()) {
-                                if (loadedImage != null) {
-                                    Palette.from(loadedImage).generate(palette -> {
-                                        int vibrant = ColorHelper.getAttributeColor(
-                                                mContext, R.attr.card_background);
-                                        int color = palette.getVibrantColor(vibrant);
-                                        if (color == vibrant)
-                                            color = palette.getMutedColor(vibrant);
-                                        holder.card.setCardBackgroundColor(color);
-                                        int text = ColorHelper.getTitleTextColor(color);
-                                        holder.name.setTextColor(text);
-                                    });
-                                }
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        if (Preferences.get(mContext).isColoredWallpapersCard()) {
+                            if (loadedImage != null) {
+                                Palette.from(loadedImage).generate(palette -> {
+                                    int vibrant = ColorHelper.getAttributeColor(
+                                            mContext, R.attr.card_background);
+                                    int color = palette.getVibrantColor(vibrant);
+                                    if (color == vibrant)
+                                        color = palette.getMutedColor(vibrant);
+                                    holder.card.setCardBackgroundColor(color);
+                                    int text = ColorHelper.getTitleTextColor(color);
+                                    holder.name.setTextColor(text);
+                                });
                             }
                         }
-                    }, null);
-        }
+                    }
+                }, null);
     }
 
     @Override

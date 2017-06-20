@@ -169,4 +169,9 @@
     <string name="txt_open">Open</string>
     <string name="txt_close">Close</string>
 
+    <!-- Playlists -->
+    <string name="playlists_add">Create new playlist</string>
+    <string name="playlists_add_hint">New playlist name?</string>
+    <string name="playlists_add_prefill"></string>
+
 </resources>

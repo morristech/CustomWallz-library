@@ -23,6 +23,7 @@ import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.LogUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -127,6 +128,7 @@ public class PlaylistsHolderFragment extends Fragment {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
+                    Collections.reverse(playlists);
                     mRecyclerView.setAdapter(new PlaylistsAdapter(getActivity(), playlists, true));
                 }
                 mGetWallpapers = null;

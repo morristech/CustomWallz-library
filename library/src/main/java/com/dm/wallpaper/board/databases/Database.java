@@ -450,11 +450,24 @@ public class Database extends SQLiteOpenHelper {
         return wallpapers;
     }
 
-    public void putPlaylistItem(int id, String playlists) {
+    public void putWallpaperInPlaylist(int id, String playlists) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_PLAYLIST, playlists);
         db.update(TABLE_WALLPAPERS, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void putNewPlaylist(PlaylistItem playlistItem) {
+        String query = "INSERT INTO " + TABLE_PLAYLISTS + " (" + KEY_NAME + ") VALUES (?);";
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(query);
+        db.beginTransaction();
+        statement.clearBindings();
+        statement.bindString(1, playlistItem.getName());
+        statement.execute();
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 

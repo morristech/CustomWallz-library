@@ -16,18 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.AddToPlaylistAdapter;
-import com.dm.wallpaper.board.adapters.FilterAdapter;
 import com.dm.wallpaper.board.databases.Database;
-import com.dm.wallpaper.board.items.Category;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,10 +57,11 @@ public class AvailablePlaylistsFragment extends DialogFragment {
 
     @BindView(R2.id.listview)
     ListView mListView;
+    TextView mNewPlaylist;
 
-    private AsyncTask<Void, Void, Boolean> mGetPlaylists;
     private static final String TAG = "com.dm.wallpaper.board.dialog.playlists";
     private int mId = -1;
+    private Database database;
 
 
     private static AvailablePlaylistsFragment newInstance(int wallpaperId) {
@@ -79,7 +82,8 @@ public class AvailablePlaylistsFragment extends DialogFragment {
         try {
             DialogFragment dialog = AvailablePlaylistsFragment.newInstance(wallpaperId);
             dialog.show(ft, TAG);
-        } catch (IllegalArgumentException | IllegalStateException ignored) {}
+        } catch (IllegalArgumentException | IllegalStateException ignored) {
+        }
     }
 
     @NonNull
@@ -88,9 +92,15 @@ public class AvailablePlaylistsFragment extends DialogFragment {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
         builder.typeface("Font-Medium.ttf", "Font-Regular.ttf");
         builder.title(R.string.wallpaper_playlist);
-        builder.customView(R.layout.fragment_filter, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_filter, null);
+        builder.customView(view, false);
+
+        mNewPlaylist = (TextView) view.findViewById(R.id.new_playlist);
+        mNewPlaylist.setOnClickListener((v) -> newPlaylistDialog());
+
         MaterialDialog dialog = builder.build();
         dialog.show();
+
 
         ButterKnife.bind(this, dialog);
         return dialog;
@@ -109,56 +119,57 @@ public class AvailablePlaylistsFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        database = Database.get(getActivity());
         getPlaylists();
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        //TO_DO: Success/failure toast
-        super.onDismiss(dialog);
+    private void getPlaylists() {
+        if (mId != -1)
+            new GetPlaylists().execute();
     }
 
-    private void getPlaylists() {
-        mGetPlaylists = new AsyncTask<Void, Void, Boolean>() {
+    private void newPlaylistDialog() {
+        new MaterialDialog.Builder(getContext())
+                .input(R.string.playlists_add_hint, R.string.playlists_add_prefill, false,
+                        (dialog, input) -> database.putNewPlaylist(new PlaylistItem(0, input.toString()))
+                ).onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                new GetPlaylists().execute()
+        ).show();
+    }
 
-            List<PlaylistItem> playlists;
+    private class GetPlaylists extends AsyncTask<Void, Void, Boolean> {
+        List<PlaylistItem> playlists;
 
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                while (!isCancelled()) {
-                    try {
-                        Thread.sleep(1);
-                        Database database = Database.get(getActivity());
-                        playlists = database.getPlaylists();
-                        return true;
-                    } catch (Exception e) {
-                        LogUtil.e(Log.getStackTraceString(e));
-                        return false;
-                    }
-                }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                Thread.sleep(1);
+                Database database = Database.get(getActivity());
+                playlists = database.getPlaylists();
+                return true;
+            } catch (Exception e) {
+                LogUtil.e(Log.getStackTraceString(e));
                 return false;
             }
+        }
 
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-                if (aBoolean) {
-                    mListView.setAdapter(new AddToPlaylistAdapter(getActivity(), playlists));
-                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            PlaylistItem playlistItem = (PlaylistItem)mListView.getItemAtPosition(position);
-                            Database database = Database.get(getActivity());
-                            database.putPlaylistItem(mId, playlistItem.getName());
-                            dismiss();
-                        }
-                    });
-                } else
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean) {
+                Collections.reverse(playlists);
+                mListView.setAdapter(new AddToPlaylistAdapter(getActivity(), playlists));
+                mListView.setOnItemClickListener((parent, view, position, id) -> {
+                    if (((PlaylistItem) mListView.getItemAtPosition(position)).getId() == -2) {
+                        newPlaylistDialog();
+                        return;
+                    }
+                    PlaylistItem playlistItem = (PlaylistItem) mListView.getItemAtPosition(position);
+                    database.putWallpaperInPlaylist(mId, playlistItem.getName());
                     dismiss();
-                mGetPlaylists = null;
-            }
-        };
-        if (mId != -1)
-            mGetPlaylists.execute();
+                });
+            } else
+                dismiss();
+        }
     }
 }

@@ -110,7 +110,6 @@ public class WallpapersAdapter extends RecyclerView.Adapter<WallpapersAdapter.Vi
         mOptions.showImageForEmptyUri(failed);
         mOptions.showImageOnFail(failed);
         mOptions.showImageOnLoading(loading);
-        //mOptions.displayer(new FadeInBitmapDisplayer(700));
     }
 
     @Override
