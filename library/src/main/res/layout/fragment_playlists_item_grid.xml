@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/playlist_card"
-    tools:ignore="MissingPrefix"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/card_margin"
     android:layout_marginEnd="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
-    android:layout_marginBottom="@dimen/card_margin"
     app:cardBackgroundColor="?attr/card_background"
+    app:cardCornerRadius="0dp"
     app:cardUseCompatPadding="@bool/card_use_compat_padding"
-    app:cardCornerRadius="0dp">
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:id="@+id/playlists_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
         android:theme="@style/ButtonStyle">
 
         <com.dm.wallpaper.board.utils.views.HeaderView
@@ -35,32 +35,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:paddingBottom="@dimen/content_margin"
+            android:paddingEnd="8dp"
+            android:paddingLeft="@dimen/content_margin"
+            android:paddingRight="8dp"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingTop="@dimen/content_margin">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/playlists_name"
+                fontPath="fonts/Font-Medium.ttf"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/content_margin"
-                android:paddingBottom="@dimen/content_margin"
-                android:paddingStart="@dimen/content_margin"
-                android:paddingEnd="8dp"
-                android:paddingLeft="@dimen/content_margin"
-                android:paddingRight="8dp"
-                android:orientation="vertical">
+                android:layout_weight="0.1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/text_content"/>
 
-                <TextView
-                    android:id="@+id/playlists_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="@dimen/text_content"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    fontPath="fonts/Font-Medium.ttf"/>
-
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/playlists_counter"
+                fontPath="fonts/Font-Medium.ttf"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="@dimen/content_padding"
+                android:layout_marginStart="@dimen/content_padding"
+                android:gravity="center"
+                android:textSize="@dimen/text_content"/>
 
         </LinearLayout>
 

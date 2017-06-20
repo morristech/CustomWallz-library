@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -123,12 +124,16 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(mPlaylists.get(position).getName());
-        List<Wallpaper> t = db.getWallpapersInPlaylist(mPlaylists.get(position).getName());
+        List<Wallpaper> wallpapers = db.getWallpapersInPlaylist(mPlaylists.get(position).getName());
         String url;
-        if (t != null && t.size() > 0)
-            url = WallpaperHelper.getThumbnailUrl(mContext, t.get(0).getUrl(), t.get(0).getThumbUrl());
-        else
+        if (wallpapers != null && wallpapers.size() > 0) {
+            url = WallpaperHelper.getThumbnailUrl(mContext, wallpapers.get(0).getUrl(), wallpapers.get(0).getThumbUrl());
+            String count = wallpapers.size() > 99 ? "99+" : String.valueOf(wallpapers.size());
+            holder.counter.setText(count);
+        } else {
             url = "";
+            holder.counter.setText("0");
+        }
         mPlaylists.get(position).setUrl(url);
         ImageLoader.getInstance().displayImage(url, new ImageViewAware(holder.image),
                 mOptions.build(), ImageConfig.getThumbnailSize(mContext), new SimpleImageLoadingListener() {
@@ -181,6 +186,8 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
         HeaderView image;
         @BindView(R2.id.playlists_name)
         TextView name;
+        @BindView(R2.id.playlists_counter)
+        TextView counter;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -194,6 +201,11 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.View
             }
 
             container.setOnClickListener(this);
+
+            int color = ColorHelper.getAttributeColor(mContext, android.R.attr.textColorPrimary);
+            ViewCompat.setBackground(counter, DrawableHelper.getTintedDrawable(
+                    mContext, R.drawable.ic_toolbar_circle, color));
+            counter.setTextColor(ColorHelper.getTitleTextColor(color));
         }
 
         @Override
