@@ -1,19 +1,14 @@
 package com.dm.wallpaper.board.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +17,10 @@ import android.widget.TextView;
 
 import com.danimahardhika.android.helpers.core.ColorHelper;
 import com.danimahardhika.android.helpers.core.DrawableHelper;
-import com.danimahardhika.cafebar.CafeBar;
-import com.danimahardhika.cafebar.CafeBarTheme;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
-import com.dm.wallpaper.board.activities.WallpaperBoardPreviewActivity;
 import com.dm.wallpaper.board.databases.Database;
-import com.dm.wallpaper.board.fragments.FavoritesFragment;
-import com.dm.wallpaper.board.fragments.WallpaperSearchFragment;
-import com.dm.wallpaper.board.fragments.WallpapersFragment;
+import com.dm.wallpaper.board.fragments.PlaylistWallpapersFragment;
 import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Wallpaper;
@@ -38,9 +28,7 @@ import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
-import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 import com.dm.wallpaper.board.utils.views.HeaderView;
-import com.kogitune.activitytransition.ActivityTransitionLauncher;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
@@ -206,7 +194,12 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            mPlaylistWallpapersListener.onPlaylistSelected(mPlaylists.get(position).getName());
+
+            final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
+            fragment.setArguments(bundle);
+            mPlaylistWallpapersListener.onPlaylistSelected(fragment);
         }
     }
 

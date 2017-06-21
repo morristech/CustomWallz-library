@@ -18,8 +18,10 @@ package com.dm.wallpaper.board.utils.listeners;
  * limitations under the License.
  */
 
+import android.support.v4.app.Fragment;
+
 public interface PlaylistWallpapersListener {
 
-    void onPlaylistSelected(String playlistName);
+    void onPlaylistSelected(Fragment fragment);
 
 }

@@ -216,7 +216,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         LocaleHelper.setLocale(this);
     }
 
-   @Override
+    @Override
     public void onBackPressed() {
         if (playlistInBackstack) {
             playlistInBackstack = false;
@@ -259,7 +259,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                 if (fragment != null) {
                     Fragment pagerFragment = fragment.getCurrentPagerFragment();
                     if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
-                        ((WallpapersFragment)pagerFragment).downloadWallpaper();
+                        ((WallpapersFragment) pagerFragment).downloadWallpaper();
                 }
             } else {
                 Toast.makeText(this, R.string.permission_storage_denied, Toast.LENGTH_LONG).show();
@@ -271,13 +271,13 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     public void onWallpapersChecked(@Nullable Intent intent) {
         if (intent != null) {
             String packageName = intent.getStringExtra("packageName");
-            LogUtil.d("Broadcast received from service with packageName: " +packageName);
+            LogUtil.d("Broadcast received from service with packageName: " + packageName);
 
             if (packageName == null)
                 return;
 
             if (!packageName.equals(getPackageName())) {
-                LogUtil.d("Received broadcast from different packageName, expected: " +getPackageName());
+                LogUtil.d("Received broadcast from different packageName, expected: " + getPackageName());
                 return;
             }
 
@@ -305,7 +305,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                         if (fragment != null) {
                             Fragment pagerFragment = fragment.getCurrentPagerFragment();
                             if (pagerFragment != null && pagerFragment instanceof WallpapersFragment)
-                                ((WallpapersFragment)pagerFragment).showPopupBubble();
+                                ((WallpapersFragment) pagerFragment).showPopupBubble();
                         }
                     }
                     return;
@@ -436,7 +436,8 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
                 String versionText = "v" + getPackageManager()
                         .getPackageInfo(getPackageName(), 0).versionName;
                 version.setText(versionText);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         if (ColorHelper.isValidColor(imageUrl)) {
@@ -522,13 +523,14 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
 
         mAppBar.setExpanded(true);
 
-        FragmentTransaction ft = mFragManager.beginTransaction()
-                .replace(R.id.container, fragment, mFragmentTag);
-
+        FragmentTransaction ft = mFragManager.beginTransaction();
+        ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         if (fragment instanceof PlaylistWallpapersFragment) {
             ft.addToBackStack(null);
             playlistInBackstack = true;
         }
+
+        ft.replace(R.id.container, fragment, mFragmentTag);
 
         try {
             ft.commit();
@@ -569,11 +571,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     }
 
     @Override
-    public void onPlaylistSelected(String s) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Extras.EXTRA_PLAYLIST_NAME, s);
-        PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
-        fragment.setArguments(bundle);
+    public void onPlaylistSelected(Fragment fragment) {
         setFragment(fragment);
     }
 }
