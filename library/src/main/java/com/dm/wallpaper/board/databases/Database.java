@@ -436,6 +436,7 @@ public class Database extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(
+                        cursor.getInt(0),
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
@@ -491,6 +492,23 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("SQLITE_SEQUENCE", "NAME = ?", new String[]{TABLE_CATEGORIES});
         db.delete(TABLE_CATEGORIES, null, null);
+        db.close();
+    }
+
+    public void deleteWallpaperFromPlaylist(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_PLAYLIST, (String) null);
+        db.update(TABLE_WALLPAPERS, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deletePlaylist(String playlistName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_PLAYLIST, (String) null);
+        db.delete(TABLE_PLAYLISTS, KEY_NAME +" = ?", new String[] {playlistName});
+        db.update(TABLE_WALLPAPERS, values, KEY_PLAYLIST + " = ?", new String[]{playlistName});
         db.close();
     }
 }

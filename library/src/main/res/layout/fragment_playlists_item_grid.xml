@@ -63,6 +63,16 @@
                 android:gravity="center"
                 android:textSize="@dimen/text_content"/>
 
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                app:srcCompat="@drawable/ic_delete_black_86dp"/>
+
         </LinearLayout>
 
     </LinearLayout>

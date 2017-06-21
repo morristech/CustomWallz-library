@@ -46,7 +46,8 @@ public class Wallpaper {
         mCategory = category;
     }
 
-    public Wallpaper(String name, String author, String thumbUrl, String url, String category, String playlists) {
+    public Wallpaper(int id, String name, String author, String thumbUrl, String url, String category, String playlists) {
+        mId = id;
         mName = name;
         mAuthor = author;
         mThumbUrl = thumbUrl;

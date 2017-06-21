@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.danimahardhika.android.helpers.core.ColorHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.activities.WallpaperBoardPreviewActivity;
+import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.WallpaperSearchFragment;
 import com.dm.wallpaper.board.fragments.WallpapersFragment;
@@ -161,6 +163,8 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
         TextView name;
         @BindView(R2.id.author)
         TextView author;
+        @BindView(R2.id.delete)
+        ImageView delete;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -175,6 +179,7 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
 
             container.setOnClickListener(this);
             container.setOnLongClickListener(this);
+            delete.setOnClickListener(this);
         }
 
         @Override
@@ -210,6 +215,11 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                     }
                 }
 
+            } else if (id == R.id.delete) {
+                Database.get(mContext)
+                        .deleteWallpaperFromPlaylist(mWallpapers.get(position).getId());
+                mWallpapers.remove(position);
+                notifyItemRemoved(position);
             }
         }
 

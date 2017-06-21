@@ -4,22 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card"
-    tools:ignore="MissingPrefix"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin"
+    android:layout_marginEnd="@dimen/card_margin"
     app:cardBackgroundColor="?attr/card_background"
+    app:cardCornerRadius="0dp"
     app:cardUseCompatPadding="@bool/card_use_compat_padding"
-    app:cardCornerRadius="0dp">
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
         android:theme="@style/ButtonStyle">
 
         <com.dm.wallpaper.board.utils.views.HeaderView
@@ -30,37 +30,53 @@
             app:heightRatio="1"
             app:widthRatio="1"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:paddingTop="@dimen/content_margin"
-            android:paddingBottom="@dimen/content_margin"
-            android:paddingStart="@dimen/content_margin"
-            android:paddingEnd="8dp">
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/content_margin"
+                android:paddingEnd="8dp"
+                android:paddingStart="@dimen/content_margin"
+                android:paddingTop="@dimen/content_margin">
 
                 <TextView
                     android:id="@+id/name"
+                    fontPath="fonts/Font-Medium.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="@dimen/text_content"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    fontPath="fonts/Font-Medium.ttf"/>
+                    android:maxLines="1"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="@dimen/text_content"/>
 
                 <TextView
                     android:id="@+id/author"
+                    fontPath="fonts/Font-Regular.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="@dimen/text_content"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    fontPath="fonts/Font-Regular.ttf"/>
+                    android:maxLines="1"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/text_content"/>
 
-        </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_delete_black_86dp"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

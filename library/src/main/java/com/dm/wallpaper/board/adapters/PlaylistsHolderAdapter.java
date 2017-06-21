@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -171,6 +172,8 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         TextView name;
         @BindView(R2.id.playlists_counter)
         TextView counter;
+        @BindView(R2.id.delete)
+        ImageView delete;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -184,6 +187,7 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
             }
 
             container.setOnClickListener(this);
+            delete.setOnClickListener(this);
 
             int color = ColorHelper.getAttributeColor(mContext, android.R.attr.textColorPrimary);
             ViewCompat.setBackground(counter, DrawableHelper.getTintedDrawable(
@@ -194,12 +198,18 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-
-            final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
-            fragment.setArguments(bundle);
-            mPlaylistWallpapersListener.onPlaylistSelected(fragment);
+            int id = view.getId();
+            if (id == R.id.playlists_container) {
+                final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
+                fragment.setArguments(bundle);
+                mPlaylistWallpapersListener.onPlaylistSelected(fragment);
+            } else if (id == R.id.delete) {
+                Database.get(mContext).deletePlaylist(mPlaylists.get(position).getName());
+                mPlaylists.remove(position);
+                notifyItemRemoved(position);
+            }
         }
     }
 
