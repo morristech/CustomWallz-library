@@ -98,6 +98,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
     private String mUrl;
     private String mName;
     private String mAuthor;
+    private String mPlaylist;
     private int mId;
     private int mColor;
     private boolean mIsEnter;
@@ -131,6 +132,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
             mAuthor = savedInstanceState.getString(Extras.EXTRA_AUTHOR);
             mId = savedInstanceState.getInt(Extras.EXTRA_ID);
             mIsResumed = savedInstanceState.getBoolean(Extras.EXTRA_RESUMED);
+            mPlaylist = savedInstanceState.getString(Extras.EXTRA_PLAYLIST_NAME, null);
         }
 
         Bundle bundle = getIntent().getExtras();
@@ -139,6 +141,7 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
             mName = bundle.getString(Extras.EXTRA_NAME);
             mAuthor = bundle.getString(Extras.EXTRA_AUTHOR);
             mId = bundle.getInt(Extras.EXTRA_ID);
+            mPlaylist = bundle.getString(Extras.EXTRA_PLAYLIST_NAME, null);
         }
 
         toolbarTitle.setText(mName);
@@ -221,6 +224,9 @@ public class WallpaperBoardPreviewActivity extends AppCompatActivity implements 
         getMenuInflater().inflate(R.menu.menu_wallpaper_preview, menu);
         MenuItem save = menu.findItem(R.id.menu_save);
         save.setVisible(getResources().getBoolean(R.bool.enable_wallpaper_download));
+        MenuItem playlist = menu.findItem(R.id.menu_wallpaper_playlist);
+        // This activity was started by PlaylistWallpapersAdapter if mPlaylist is not null.
+        playlist.setVisible(mPlaylist == null);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -19,6 +19,7 @@ import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.android.helpers.core.ViewHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
+import com.dm.wallpaper.board.adapters.PlaylistWallpapersAdapter;
 import com.dm.wallpaper.board.adapters.WallpapersAdapter;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.Wallpaper;
@@ -149,7 +150,7 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
-                    mRecyclerView.setAdapter(new WallpapersAdapter(getActivity(), wallpapers, true, false));
+                    mRecyclerView.setAdapter(new PlaylistWallpapersAdapter(getActivity(), wallpapers, true, false));
 
                     if (mRecyclerView.getAdapter().getItemCount() == 0) {
                         int color = ColorHelper.getAttributeColor(getActivity(),
