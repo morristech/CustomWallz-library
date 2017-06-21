@@ -524,7 +524,7 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         mAppBar.setExpanded(true);
 
         FragmentTransaction ft = mFragManager.beginTransaction();
-        ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in_enter, R.anim.fade_out_exit);
         if (fragment instanceof PlaylistWallpapersFragment) {
             ft.addToBackStack(null);
             playlistInBackstack = true;
