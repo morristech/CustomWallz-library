@@ -96,6 +96,7 @@ public class AvailablePlaylistsFragment extends DialogFragment {
         builder.customView(view, false);
 
         mNewPlaylist = (TextView) view.findViewById(R.id.new_playlist);
+        mNewPlaylist.setVisibility(View.VISIBLE);
         mNewPlaylist.setOnClickListener((v) -> newPlaylistDialog());
 
         MaterialDialog dialog = builder.build();
