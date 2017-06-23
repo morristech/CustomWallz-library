@@ -78,7 +78,7 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wallpapers, container, false);
-        mListener = (PlaylistWallpaperSelectedListener) this;
+        mListener = this;
         ButterKnife.bind(this, view);
 
         if (!Preferences.get(getActivity()).isShadowEnabled()) {
@@ -128,7 +128,6 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
         delete = menu.findItem(R.id.menu_delete);
         delete.setVisible(false);
         delete.setEnabled(false);
-
     }
 
     @Override

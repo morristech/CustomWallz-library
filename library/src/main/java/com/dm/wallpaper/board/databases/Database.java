@@ -507,7 +507,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_PLAYLIST, (String) null);
-        db.delete(TABLE_PLAYLISTS, KEY_NAME +" = ?", new String[] {playlistName});
+        db.delete(TABLE_PLAYLISTS, KEY_NAME + " = ?", new String[]{playlistName});
         db.update(TABLE_WALLPAPERS, values, KEY_PLAYLIST + " = ?", new String[]{playlistName});
         db.close();
     }

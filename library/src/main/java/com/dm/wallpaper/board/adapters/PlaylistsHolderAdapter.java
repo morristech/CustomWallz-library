@@ -3,6 +3,7 @@ package com.dm.wallpaper.board.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -13,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.danimahardhika.android.helpers.core.ColorHelper;
@@ -28,6 +29,7 @@ import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
+import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 import com.dm.wallpaper.board.utils.views.HeaderView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -69,15 +71,20 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
     private List<PlaylistItem> mPlaylists;
     private List<PlaylistItem> mPlaylistsAll;
     private PlaylistWallpapersListener mPlaylistWallpapersListener;
+    public List<Integer> mSelected;
+    private PlaylistWallpaperSelectedListener mSelectedListener;
 
     private Database db;
 
     public PlaylistsHolderAdapter(@NonNull Context context, @NonNull List<PlaylistItem> wallpapers,
-                                  boolean isSearchMode, PlaylistWallpapersListener playlistWallpapersListener) {
+                                  boolean isSearchMode, PlaylistWallpapersListener playlistWallpapersListener,
+                                  PlaylistWallpaperSelectedListener selectedListener) {
         mContext = context;
         mPlaylists = wallpapers;
         db = Database.get(mContext);
         mPlaylistWallpapersListener = playlistWallpapersListener;
+        mSelectedListener = selectedListener;
+        mSelected = new ArrayList<>();
 
         if (isSearchMode) {
             mPlaylistsAll = new ArrayList<>();
@@ -160,20 +167,20 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         return mPlaylists.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R2.id.playlist_card)
         CardView card;
         @BindView(R2.id.playlists_container)
-        LinearLayout container;
+        RelativeLayout container;
         @BindView(R2.id.playlists_image)
         HeaderView image;
         @BindView(R2.id.playlists_name)
         TextView name;
         @BindView(R2.id.playlists_counter)
         TextView counter;
-        @BindView(R2.id.delete)
-        ImageView delete;
+        @BindView(R2.id.check)
+        ImageView check;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -187,28 +194,71 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
             }
 
             container.setOnClickListener(this);
-            delete.setOnClickListener(this);
+            container.setOnLongClickListener(this);
 
             int color = ColorHelper.getAttributeColor(mContext, android.R.attr.textColorPrimary);
+            int colorAccent;
             ViewCompat.setBackground(counter, DrawableHelper.getTintedDrawable(
                     mContext, R.drawable.ic_toolbar_circle, color));
             counter.setTextColor(ColorHelper.getTitleTextColor(color));
+            if (Build.VERSION.SDK_INT >= 21) {
+                colorAccent = ColorHelper.getAttributeColor(mContext, android.R.attr.colorAccent);
+            } else colorAccent = mContext.getResources().getColor(R.color.colorAccent);
+            check.setColorFilter(colorAccent);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
             int id = view.getId();
+
+            if (position < 0 || position > mPlaylists.size()) {
+                return;
+            }
             if (id == R.id.playlists_container) {
-                final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
-                fragment.setArguments(bundle);
-                mPlaylistWallpapersListener.onPlaylistSelected(fragment);
-            } else if (id == R.id.delete) {
-                Database.get(mContext).deletePlaylist(mPlaylists.get(position).getName());
-                mPlaylists.remove(position);
-                notifyItemRemoved(position);
+                if (mSelected.size() > 0) {
+                    selectDeselectWallpapers(position);
+                } else {
+                    final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
+                    fragment.setArguments(bundle);
+                    mPlaylistWallpapersListener.onPlaylistSelected(fragment);
+                }
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int id = view.getId();
+            int position = getAdapterPosition();
+            if (position < 0 || position > mPlaylists.size()) {
+                return false;
+            }
+            if (id == R.id.playlists_container) {
+                selectDeselectWallpapers(position);
+                return true;
+            }
+            return false;
+        }
+
+        private void selectDeselectWallpapers(int position) {
+            if (check.getVisibility() == View.GONE) {
+                mSelected.add(position);
+                check.setVisibility(View.VISIBLE);
+                mSelectedListener.showDelete();
+            } else if (check.getVisibility() == View.VISIBLE) {
+                int pos = -1;
+                for (int i = 0; i <= mSelected.size(); i++) {
+                    if (mSelected.get(i) == position) {
+                        pos = i;
+                        break;
+                    }
+                }
+                if (pos > -1)
+                    mSelected.remove(pos);
+                check.setVisibility(View.GONE);
+                mSelectedListener.showDelete();
             }
         }
     }

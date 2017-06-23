@@ -10,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,6 +24,7 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 
 import java.util.ArrayList;
@@ -50,7 +54,7 @@ import static com.dm.wallpaper.board.helpers.ViewHelper.resetViewBottomPadding;
  * limitations under the License.
  */
 
-public class PlaylistsHolderFragment extends Fragment {
+public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpaperSelectedListener {
 
     @BindView(R2.id.recyclerview)
     RecyclerView mRecyclerView;
@@ -58,17 +62,24 @@ public class PlaylistsHolderFragment extends Fragment {
     SwipeRefreshLayout mSwipe;
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
+    private List<PlaylistItem> mPlaylists;
+    private PlaylistsHolderAdapter adapter;
+    private PlaylistWallpaperSelectedListener mListener;
+    private MenuItem delete;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_playlists_holder, container, false);
         ButterKnife.bind(this, view);
+        mListener = this;
 
         if (!Preferences.get(getActivity()).isShadowEnabled()) {
             View shadow = ButterKnife.findById(view, R.id.shadow);
             if (shadow != null) shadow.setVisibility(View.GONE);
         }
+
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -94,6 +105,37 @@ public class PlaylistsHolderFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_playlists_wallpapers, menu);
+        delete = menu.findItem(R.id.menu_delete);
+        delete.setVisible(false);
+        delete.setEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_delete) {
+            delete.setVisible(false);
+            delete.setEnabled(false);
+            if (adapter == null || adapter.mSelected == null)
+                return true;
+            Database db = Database.get(getActivity());
+
+            // Sorting mSelected to prevent IndexOutOfBounds as elements shift after every remove()
+            Collections.sort(adapter.mSelected, Collections.reverseOrder());
+            for (int position : adapter.mSelected) {
+                db.deletePlaylist(mPlaylists.get(position).getName());
+                mPlaylists.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+            adapter.mSelected.clear();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onDestroy() {
         if (mGetWallpapers != null) mGetWallpapers.cancel(true);
         super.onDestroy();
@@ -102,12 +144,10 @@ public class PlaylistsHolderFragment extends Fragment {
     private void getPlaylists() {
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
-            List<PlaylistItem> playlists;
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                playlists = new ArrayList<>();
+                mPlaylists = new ArrayList<>();
             }
 
             @Override
@@ -115,8 +155,8 @@ public class PlaylistsHolderFragment extends Fragment {
                 while (!isCancelled()) {
                     try {
                         Thread.sleep(1);
-                        playlists = Database.get(getActivity()).getPlaylists();
-                        return !(playlists == null || playlists.size() == 0);
+                        mPlaylists = Database.get(getActivity()).getPlaylists();
+                        return !(mPlaylists == null || mPlaylists.size() == 0);
                     } catch (Exception e) {
                         LogUtil.e(Log.getStackTraceString(e));
                         return false;
@@ -129,9 +169,10 @@ public class PlaylistsHolderFragment extends Fragment {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
-                    Collections.reverse(playlists);
+                    Collections.reverse(mPlaylists);
                     PlaylistWallpapersListener playlistWallpapersListener = (PlaylistWallpapersListener) getActivity();
-                    mRecyclerView.setAdapter(new PlaylistsHolderAdapter(getActivity(), playlists, true, playlistWallpapersListener));
+                    adapter = new PlaylistsHolderAdapter(getActivity(), mPlaylists, true, playlistWallpapersListener, mListener);
+                    mRecyclerView.setAdapter(adapter);
                 }
                 mGetWallpapers = null;
             }
@@ -140,5 +181,18 @@ public class PlaylistsHolderFragment extends Fragment {
 
     void startPlaylists() {
         getPlaylists();
+    }
+
+    @Override
+    public void showDelete() {
+        if (adapter == null)
+            return;
+        if (adapter.mSelected.size() > 0) {
+            delete.setVisible(true);
+            delete.setEnabled(true);
+        } else {
+            delete.setVisible(false);
+            delete.setEnabled(false);
+        }
     }
 }
