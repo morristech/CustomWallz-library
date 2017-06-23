@@ -2,6 +2,7 @@ package com.dm.wallpaper.board.fragments.dialogs;
 
 import android.app.Dialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -96,6 +97,11 @@ public class AvailablePlaylistsFragment extends DialogFragment {
         builder.customView(view, false);
 
         mNewPlaylist = (TextView) view.findViewById(R.id.new_playlist);
+        int colorAccent;
+        if (Build.VERSION.SDK_INT >= 21) {
+            colorAccent = ColorHelper.getAttributeColor(getActivity(), android.R.attr.colorAccent);
+        } else colorAccent = getActivity().getResources().getColor(R.color.colorAccent);
+        mNewPlaylist.setTextColor(colorAccent);
         mNewPlaylist.setVisibility(View.VISIBLE);
         mNewPlaylist.setOnClickListener((v) -> newPlaylistDialog());
 

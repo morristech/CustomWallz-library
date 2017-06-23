@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Card -->
+    <bool name="abc_action_bar_embed_tabs">true</bool>
+    <bool name="android_helpers_tablet_mode">false</bool>
+    <bool name="cafebar_tablet_mode">false</bool>
+    <bool name="md_is_tablet">false</bool>
+    <bool name="abc_allow_stacked_button_bar">true</bool>
     <bool name="card_use_compat_padding">true</bool>
-
+    <bool name="abc_config_actionMenuItemAllCaps">true</bool>
+    <bool name="abc_config_closeDialogWhenTouchOutside">true</bool>
+    <bool name="abc_config_showMenuShortcutsWhenKeyboardPresent">false</bool>
+    <bool name="enable_donation">false</bool>
+    <bool name="enable_shadow">true</bool>
+    <bool name="enable_wallpaper_card_rounded_corner">false</bool>
+    <bool name="enable_wallpaper_download">true</bool>
+    <bool name="show_contributors_dialog">true</bool>
+    <bool name="use_dark_theme">true</bool>
 </resources>

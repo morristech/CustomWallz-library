@@ -26,9 +26,6 @@
             android:textSize="18sp"
             app:tabIndicatorColor="@color/toolbarIcon"
             app:tabIndicatorHeight="4dp"
-            app:tabPaddingBottom="15dp"
-            app:tabPaddingTop="15dp"
-            app:tabSelectedTextColor="@color/toolbarIcon"
             app:tabTextColor="@color/toolbarIcon"/>
     </android.support.v4.view.ViewPager>
 

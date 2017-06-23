@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.danimahardhika.android.helpers.core.WindowHelper;
 import com.dm.wallpaper.board.R;
+import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 
 public class WallpaperPagerFragment extends Fragment {
@@ -47,6 +49,12 @@ public class WallpaperPagerFragment extends Fragment {
 
         tabLayout.setTabGravity(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        int color = ContextCompat.getColor(getActivity(),
+                Preferences.get(getActivity()).isDarkTheme() ?
+                        R.color.darkColorAccent :
+                        R.color.colorAccent);
+        tabLayout.setSelectedTabIndicatorColor(color);
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

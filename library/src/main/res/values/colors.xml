@@ -1,62 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="colorPrimary">#DC4316</color>
-    <color name="colorPrimaryDark">#C43916</color>
-    <color name="colorAccent">#F25A16</color>
-
-    <color name="darkColorPrimary">#DC4316</color>
-    <color name="darkColorPrimaryDark">#C43916</color>
-    <color name="darkColorAccent">#F25A16</color>
-
-    <!-- Splash Screen -->
-    <color name="splashColor">#F2F2F2</color>
-
-    <!-- Toolbar -->
-    <color name="toolbarIcon">#FFFFFF</color>
-    <color name="toolbarIconDark">#FFFFFF</color>
-
-    <!-- Navigation View -->
-    <color name="navigationViewTitle">#FFFFFF</color>
-    <color name="navigationViewTitleBack">#55000000</color>
-
-    <color name="navigationViewText">#D9000000</color>
-    <color name="navigationViewTextDark">#FFFFFF</color>
-    <color name="navigationViewTextSelected">#DC4316</color>
-    <color name="navigationViewTextSelectedDark">#DC4316</color>
+    <color name="cafebar_action_button_ripple">#3d8c878b</color>
+    <color name="cafebar_action_button_ripple_dark">#44ffffff</color>
+    <color name="cardBackground">#ff000000</color>
+    <color name="cardBackgroundDark">#ff000000</color>
+    <color name="cardview_dark_background">#ff000000</color>
+    <color name="cardview_light_background">#ff000000</color>
+    <color name="cardview_shadow_end_color">#03000000</color>
+    <color name="cardview_shadow_start_color">#37000000</color>
+    <color name="colorAccent">#fff44336</color>
+    <color name="colorPrimary">#ff000000</color>
+    <color name="colorPrimaryDark">#ff000000</color>
+    <color name="darkColorAccent">#ff1a7eda</color>
+    <color name="darkColorPrimary">#ff000000</color>
+    <color name="darkColorPrimaryDark">#ff000000</color>
+    <color name="dividerList">#ffd32d2f</color>
+    <color name="dividerListDark">#ff0254bc</color>
+    <color name="favoriteColor">#fffd1823</color>
+    <color name="mainBackground">#ff000000</color>
+    <color name="mainBackgroundDark">#ff000000</color>
+    <color name="muzei_color">#ffffca44</color>
     <color name="navigationViewSelectedBackground">#00000000</color>
     <color name="navigationViewSelectedBackgroundDark">#00000000</color>
-
-    <!-- Popup Bubble -->
-    <color name="popupBubble">#F25A16</color>
-    <color name="popupBubbleText">#FFFFFF</color>
-
-    <!-- Card -->
-    <color name="cardBackground">#FFFFFF</color>
-    <color name="cardBackgroundDark">#222222</color>
-
-    <!-- Ripple -->
-    <color name="rippleColor">#4D000000</color>
-    <color name="rippleColorDark">#4DFFFFFF</color>
-    <color name="rippleAccent">#44DC4316</color>
-    <color name="rippleAccentDark">#44DC4316</color>
-
-    <!-- Attributes -->
-    <color name="mainBackground">#EAEAEA</color>
-    <color name="mainBackgroundDark">#181818</color>
-    <color name="primaryText">#D9000000</color>
-    <color name="primaryTextDark">#FFFFFF</color>
-    <color name="secondaryText">#8C000000</color>
-    <color name="secondaryTextDark">#B3FFFFFF</color>
-
-    <color name="dividerList">#18000000</color>
-    <color name="dividerListDark">#18FFFFFF</color>
-
-    <!-- Favorite Wallpaper -->
-    <color name="favoriteColor">#DC4316</color>
-
-    <!-- Wallpaper Preview -->
-    <color name="wallpaperStatusBar">#AA000000</color>
-    <color name="wallpaperToolbar">#66000000</color>
-
+    <color name="navigationViewText">#ffffffff</color>
+    <color name="navigationViewTextDark">#ffffffff</color>
+    <color name="navigationViewTextSelected">#fff44336</color>
+    <color name="navigationViewTextSelectedDark">#ff1a7eda</color>
+    <color name="navigationViewTitle">#ffffffff</color>
+    <color name="navigationViewTitleBack">#55000000</color>
+    <color name="popupBubble">#ff000000</color>
+    <color name="popupBubbleText">#ffffffff</color>
+    <color name="primaryText">#ffffffff</color>
+    <color name="primaryTextDark">#ffffffff</color>
+    <color name="rippleAccent">#a8f44336</color>
+    <color name="rippleAccentDark">#4a1a7eda</color>
+    <color name="rippleColor">#4dc3c7c9</color>
+    <color name="rippleColorDark">#4dffffff</color>
+    <color name="secondaryText">#afe6e4e8</color>
+    <color name="secondaryTextDark">#cccfd3d6</color>
+    <color name="splashColor">#ff000000</color>
+    <color name="toolbarIcon">#ffffffff</color>
+    <color name="toolbarIconDark">#ffffffff</color>
+    <color name="wallpaperStatusBar">#41000000</color>
+    <color name="wallpaperToolbar">#4c000000</color>
+    <color name="fastScrollTrack">#9bf44336</color>
+    <color name="fastScrollTrackDark">#941a7eda</color>
+    <color name="searchToolbar">#ff000000</color>
+    <color name="searchToolbarDark">#ff000000</color>
+    <color name="searchToolbarHintText">#76ffffff</color>
+    <color name="searchToolbarHintTextDark">#44ffffff</color>
+    <color name="searchToolbarIcon">#ffffffff</color>
+    <color name="searchToolbarIconDark">#ddffffff</color>
+    <color name="toolbar">#ff000000</color>
+    <color name="toolbarDark">#ff000000</color>
+    <color name="toolbarHintText">#afc6c7c5</color>
+    <color name="toolbarHintTextDark">#44ffffff</color>
 </resources>

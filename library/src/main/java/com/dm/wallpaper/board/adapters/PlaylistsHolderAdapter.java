@@ -94,8 +94,7 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         int color = ColorHelper.getAttributeColor(mContext, android.R.attr.textColorSecondary);
         Drawable loading = getDefaultImage(mContext, R.drawable.ic_default_image_loading, color,
                 mContext.getResources().getDimensionPixelSize(R.dimen.default_image_padding));
-        Drawable failed = getDefaultImage(mContext, R.drawable.ic_default_image_failed, color,
-                mContext.getResources().getDimensionPixelSize(R.dimen.default_image_padding));
+        Drawable failed = mContext.getResources().getDrawable(R.drawable.blank_playlist);
         mOptions = ImageConfig.getRawDefaultImageOptions();
         mOptions.resetViewBeforeLoading(true);
         mOptions.cacheInMemory(true);

@@ -192,13 +192,7 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
                     mRecyclerView.setAdapter(mPlaylistWallpapersAdapter);
 
                     if (mRecyclerView.getAdapter().getItemCount() == 0) {
-                        int color = ColorHelper.getAttributeColor(getActivity(),
-                                android.R.attr.textColorSecondary);
-
-                        mFavoriteEmpty.setImageDrawable(
-                                DrawableHelper.getTintedDrawable(getActivity(),
-                                        R.drawable.ic_wallpaper_favorite_empty,
-                                        ColorHelper.setColorAlpha(color, 0.7f)));
+                        mFavoriteEmpty.setImageResource(R.drawable.blank_playlist);
                         mFavoriteEmpty.setVisibility(View.VISIBLE);
                     }
                 }
