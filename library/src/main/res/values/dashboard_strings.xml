@@ -16,6 +16,7 @@
     <string name="share_app_body">Check out %1$s, this wallpaper app is really cool! %2$s</string>
 
     <!-- Menu -->
+    <string name="menu_delete">Delete</string>
     <string name="menu_search">Search</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_save">Save to Device</string>

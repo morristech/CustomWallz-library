@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.danimahardhika.android.helpers.core.ColorHelper;
@@ -33,6 +35,7 @@ import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
+import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 import com.dm.wallpaper.board.utils.views.HeaderView;
 import com.kogitune.activitytransition.ActivityTransitionLauncher;
@@ -41,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,11 +75,15 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
     private final Context mContext;
     private final DisplayImageOptions.Builder mOptions;
     private List<Wallpaper> mWallpapers;
+    public List<Integer> mSelected;
+    private PlaylistWallpaperSelectedListener mListener;
 
     public PlaylistWallpapersAdapter(@NonNull Context context, @NonNull List<Wallpaper> wallpapers,
-                                     boolean isFavoriteMode, boolean isSearchMode) {
+                                     PlaylistWallpaperSelectedListener listener) {
         mContext = context;
         mWallpapers = wallpapers;
+        mSelected = new ArrayList<>();
+        mListener = listener;
 
 
         int color = ColorHelper.getAttributeColor(mContext, android.R.attr.textColorSecondary);
@@ -156,15 +164,15 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
         @BindView(R2.id.card)
         CardView card;
         @BindView(R2.id.container)
-        LinearLayout container;
+        RelativeLayout container;
         @BindView(R2.id.image)
         HeaderView image;
         @BindView(R2.id.name)
         TextView name;
         @BindView(R2.id.author)
         TextView author;
-        @BindView(R2.id.delete)
-        ImageView delete;
+        @BindView(R2.id.check)
+        ImageView check;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -177,49 +185,55 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                 card.setRadius(mContext.getResources().getDimensionPixelSize(R.dimen.card_corner_radius));
             }
 
+            int colorAccent;
+            if (Build.VERSION.SDK_INT >= 21) {
+                colorAccent = ColorHelper.getAttributeColor(mContext, android.R.attr.colorAccent);
+            } else colorAccent = mContext.getResources().getColor(R.color.colorAccent);
+            check.setColorFilter(colorAccent);
             container.setOnClickListener(this);
             container.setOnLongClickListener(this);
-            delete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
+            if (position < 0 || position > mWallpapers.size()) {
+                return;
+            }
             if (id == R.id.container) {
-                try {
-                    final Intent intent = new Intent(mContext, WallpaperBoardPreviewActivity.class);
-                    intent.putExtra(Extras.EXTRA_URL, mWallpapers.get(position).getUrl());
-                    intent.putExtra(Extras.EXTRA_AUTHOR, mWallpapers.get(position).getAuthor());
-                    intent.putExtra(Extras.EXTRA_NAME, mWallpapers.get(position).getName());
-                    intent.putExtra(Extras.EXTRA_ID, mWallpapers.get(position).getId());
-                    intent.putExtra(Extras.EXTRA_PLAYLIST_NAME, mWallpapers.get(position).getPlaylists());
+                if (mSelected.size() > 0) {
+                    selectDeselectWallpapers(position);
+                } else {
+                    try {
+                        final Intent intent = new Intent(mContext, WallpaperBoardPreviewActivity.class);
+                        intent.putExtra(Extras.EXTRA_URL, mWallpapers.get(position).getUrl());
+                        intent.putExtra(Extras.EXTRA_AUTHOR, mWallpapers.get(position).getAuthor());
+                        intent.putExtra(Extras.EXTRA_NAME, mWallpapers.get(position).getName());
+                        intent.putExtra(Extras.EXTRA_ID, mWallpapers.get(position).getId());
+                        intent.putExtra(Extras.EXTRA_PLAYLIST_NAME, mWallpapers.get(position).getPlaylists());
 
-                    ActivityTransitionLauncher.with((AppCompatActivity) mContext)
-                            .from(image, Extras.EXTRA_IMAGE)
-                            .image(((BitmapDrawable) image.getDrawable()).getBitmap())
-                            .launch(intent);
-                } catch (Exception e) {
-                }
+                        ActivityTransitionLauncher.with((AppCompatActivity) mContext)
+                                .from(image, Extras.EXTRA_IMAGE)
+                                .image(((BitmapDrawable) image.getDrawable()).getBitmap())
+                                .launch(intent);
+                    } catch (Exception e) {
+                    }
 
-                FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
-                if (fm != null) {
-                    Fragment fragment = fm.findFragmentById(R.id.container);
-                    if (fragment != null) {
-                        if (fragment instanceof WallpapersFragment ||
-                                fragment instanceof FavoritesFragment ||
-                                fragment instanceof WallpaperSearchFragment) {
-                            WallpaperListener listener = (WallpaperListener) fragment;
-                            listener.onWallpaperSelected(position);
+                    FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                    if (fm != null) {
+                        Fragment fragment = fm.findFragmentById(R.id.container);
+                        if (fragment != null) {
+                            if (fragment instanceof WallpapersFragment ||
+                                    fragment instanceof FavoritesFragment ||
+                                    fragment instanceof WallpaperSearchFragment) {
+                                WallpaperListener listener = (WallpaperListener) fragment;
+                                listener.onWallpaperSelected(position);
+                            }
                         }
                     }
                 }
 
-            } else if (id == R.id.delete) {
-                Database.get(mContext)
-                        .deleteWallpaperFromPlaylist(mWallpapers.get(position).getId());
-                mWallpapers.remove(position);
-                notifyItemRemoved(position);
             }
         }
 
@@ -227,18 +241,34 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
         public boolean onLongClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
+            if (position < 0 || position > mWallpapers.size()) {
+                return false;
+            }
             if (id == R.id.container) {
-                if (position < 0 || position > mWallpapers.size()) {
-                    return false;
-                }
-
-                WallpaperOptionsFragment.showWallpaperOptionsDialog(
-                        ((AppCompatActivity) mContext).getSupportFragmentManager(),
-                        mWallpapers.get(position).getUrl(),
-                        mWallpapers.get(position).getName());
+                selectDeselectWallpapers(position);
                 return true;
             }
             return false;
+        }
+
+        private void selectDeselectWallpapers(int position) {
+            if (check.getVisibility() == View.GONE) {
+                mSelected.add(position);
+                check.setVisibility(View.VISIBLE);
+                mListener.showDelete();
+            } else if (check.getVisibility() == View.VISIBLE) {
+                int pos = -1;
+                for (int i = 0; i <= mSelected.size(); i++) {
+                    if (mSelected.get(i) == position) {
+                        pos = i;
+                        break;
+                    }
+                }
+                if (pos > -1)
+                    mSelected.remove(pos);
+                check.setVisibility(View.GONE);
+                mListener.showDelete();
+            }
         }
     }
 }

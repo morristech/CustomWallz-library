@@ -13,7 +13,7 @@
     app:cardUseCompatPadding="@bool/card_use_compat_padding"
     tools:ignore="MissingPrefix">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,54 +30,50 @@
             app:heightRatio="1"
             app:widthRatio="1"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_below="@id/image"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/content_margin"
+            android:paddingEnd="8dp"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingTop="@dimen/content_margin">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/name"
+                fontPath="fonts/Font-Medium.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/content_margin"
-                android:paddingEnd="8dp"
-                android:paddingStart="@dimen/content_margin"
-                android:paddingTop="@dimen/content_margin">
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/text_content"/>
 
-                <TextView
-                    android:id="@+id/name"
-                    fontPath="fonts/Font-Medium.ttf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="@dimen/text_content"/>
-
-                <TextView
-                    android:id="@+id/author"
-                    fontPath="fonts/Font-Regular.ttf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="@dimen/text_content"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/delete"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/author"
+                fontPath="fonts/Font-Regular.ttf"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_delete_black_86dp"/>
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/text_content"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_check_box_black_24dp"/>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
