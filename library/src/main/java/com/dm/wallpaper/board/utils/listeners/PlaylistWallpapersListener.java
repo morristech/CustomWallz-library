@@ -23,5 +23,6 @@ import android.support.v4.app.Fragment;
 public interface PlaylistWallpapersListener {
 
     void onPlaylistSelected(Fragment fragment);
+    void onFavouritesSelected();
 
 }

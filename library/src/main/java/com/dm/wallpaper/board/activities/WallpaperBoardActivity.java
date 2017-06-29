@@ -46,6 +46,7 @@ import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.fragments.AboutFragment;
+import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.PlaylistWallpapersFragment;
 import com.dm.wallpaper.board.fragments.SettingsFragment;
 import com.dm.wallpaper.board.fragments.WallpaperPagerFragment;
@@ -528,9 +529,16 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         if (fragment instanceof PlaylistWallpapersFragment) {
             ft.addToBackStack(null);
             playlistInBackstack = true;
-        }
+            ft.replace(R.id.container, fragment, mFragmentTag);
 
-        ft.replace(R.id.container, fragment, mFragmentTag);
+        } else if (fragment instanceof FavoritesFragment) {
+            ft.addToBackStack(null);
+            playlistInBackstack = true;
+            ft.replace(R.id.container, fragment, mFragmentTag);
+            ((FavoritesFragment) fragment).getWallpapers();
+
+        } else
+            ft.replace(R.id.container, fragment, mFragmentTag);
 
         try {
             ft.commit();
@@ -573,5 +581,10 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     @Override
     public void onPlaylistSelected(Fragment fragment) {
         setFragment(fragment);
+    }
+
+    @Override
+    public void onFavouritesSelected() {
+        setFragment(new FavoritesFragment().setActivity(this));
     }
 }

@@ -22,6 +22,7 @@ import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.databases.Database;
+import com.dm.wallpaper.board.fragments.FavoritesFragment;
 import com.dm.wallpaper.board.fragments.PlaylistWallpapersFragment;
 import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.items.PlaylistItem;
@@ -218,11 +219,16 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
                 if (mSelected.size() > 0) {
                     selectDeselectWallpapers(position);
                 } else {
-                    final PlaylistWallpapersFragment fragment = new PlaylistWallpapersFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylists.get(position).getName());
-                    fragment.setArguments(bundle);
-                    mPlaylistWallpapersListener.onPlaylistSelected(fragment);
+                    String selectedName = mPlaylists.get(position).getName();
+                    if ("Favourites".equals(selectedName)) {
+                        mPlaylistWallpapersListener.onFavouritesSelected();
+                    } else {
+                        PlaylistWallpapersFragment playlistWallpapersFragment = new PlaylistWallpapersFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Extras.EXTRA_PLAYLIST_NAME, selectedName);
+                        playlistWallpapersFragment.setArguments(bundle);
+                        mPlaylistWallpapersListener.onPlaylistSelected(playlistWallpapersFragment);
+                    }
                 }
             }
         }
@@ -242,6 +248,9 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         }
 
         private void selectDeselectWallpapers(int position) {
+            if ("Favourites".equals(mPlaylists.get(position).getName()))
+                return;
+
             if (check.getVisibility() == View.GONE) {
                 mSelected.add(position);
                 check.setVisibility(View.VISIBLE);

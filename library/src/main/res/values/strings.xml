@@ -148,6 +148,7 @@
     <string name="wallpaper_playlist">Add to a playlist</string>
     <string name="no_wallpapers">No wallpapers in this category.</string>
     <string name="no_playlists">No playlists. Create one from the button in wallpaper previews.</string>
+    <string name="blank_playlist">This playlist is blank.</string>
     <string name="no_favourites">No favourites yet.</string>
 
     <!-- The tag that will only be there in the second list of wallpapers.

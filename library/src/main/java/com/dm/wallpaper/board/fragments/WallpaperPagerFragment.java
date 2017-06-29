@@ -52,7 +52,7 @@ public class WallpaperPagerFragment extends Fragment {
 
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         int color = ContextCompat.getColor(getActivity(),
                 Preferences.get(getActivity()).isDarkTheme() ?
@@ -120,10 +120,6 @@ public class WallpaperPagerFragment extends Fragment {
                     fragment.setArguments(bundle);
                     break;
                 case 2:
-                    fragment = new FavoritesFragment();
-                    break;
-
-                case 3:
                     fragment = new PlaylistsHolderFragment();
             }
 

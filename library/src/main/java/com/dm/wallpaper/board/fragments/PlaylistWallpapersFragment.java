@@ -15,10 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.danimahardhika.android.helpers.core.ColorHelper;
-import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.android.helpers.core.ViewHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
@@ -28,6 +26,7 @@ import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 
@@ -64,8 +63,8 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     RecyclerView mRecyclerView;
     @BindView(R2.id.swipe)
     SwipeRefreshLayout mSwipe;
-    @BindView(R2.id.favorite_empty)
-    ImageView mFavoriteEmpty;
+    @BindView(R2.id.empty)
+    TextView mBlankPlaylist;
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
     private String mPlaylistName;
@@ -192,9 +191,11 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
                     mRecyclerView.setAdapter(mPlaylistWallpapersAdapter);
 
                     if (mRecyclerView.getAdapter().getItemCount() == 0) {
-                        mFavoriteEmpty.setImageResource(R.drawable.blank_playlist);
-                        mFavoriteEmpty.setVisibility(View.VISIBLE);
-                    }
+                        new TextViewPadding().setPaddings(mBlankPlaylist, getActivity(), false);
+                        mBlankPlaylist.setText(getResources().getString(R.string.blank_playlist));
+                        mBlankPlaylist.setVisibility(View.VISIBLE);
+                    } else
+                        mBlankPlaylist.setVisibility(View.GONE);
                 }
                 mGetWallpapers = null;
             }

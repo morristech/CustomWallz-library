@@ -358,7 +358,7 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                     mRecyclerView.setAdapter(mAdapter);
 
                     if (mAdapter.getItemCount() == 0) {
-                        TextViewPadding.setPaddings(mNoWallpapers, getActivity());
+                        new TextViewPadding().setPaddings(mNoWallpapers, getActivity(), false);
                         mNoWallpapers.setText(getResources().getString(R.string.no_wallpapers));
                         mNoWallpapers.setVisibility(View.VISIBLE);
                     } else

@@ -431,8 +431,13 @@ public class Database extends SQLiteOpenHelper {
     public List<Wallpaper> getWallpapersInPlaylist(String playlist) {
         List<Wallpaper> wallpapers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_WALLPAPERS, null, KEY_PLAYLIST + " = ?", new String[]{playlist},
-                null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
+        Cursor cursor;
+        if ("Favourites".equals(playlist))
+            cursor = db.query(TABLE_WALLPAPERS, null, KEY_FAVORITE + " = ?", new String[]{"1"},
+                    null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
+        else
+            cursor = db.query(TABLE_WALLPAPERS, null, KEY_PLAYLIST + " = ?", new String[]{playlist},
+                    null, null, KEY_ADDED_ON + " DESC, " + KEY_ID);
         if (cursor.moveToFirst()) {
             do {
                 Wallpaper wallpaper = new Wallpaper(

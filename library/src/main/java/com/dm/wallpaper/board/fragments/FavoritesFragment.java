@@ -1,5 +1,6 @@
 package com.dm.wallpaper.board.fragments;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +63,8 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
 
+    private Activity mActivity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,6 +114,7 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
     }
 
     public void getWallpapers() {
+        Log.i("GAAH", "getWallpapers: ");
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
             List<Wallpaper> wallpapers;
@@ -125,8 +129,11 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
             protected Boolean doInBackground(Void... voids) {
                 while (!isCancelled()) {
                     try {
-                        Thread.sleep(1);
-                        wallpapers = Database.get(getActivity()).getFavoriteWallpapers();
+                        if (mActivity == null)
+                            return false;
+                        wallpapers = Database.get(mActivity).getFavoriteWallpapers();
+                        for (Wallpaper wall : wallpapers)
+                            Log.i("GAAH", "doInBackground: " + wall.getName());
                         return true;
                     } catch (Exception e) {
                         LogUtil.e(Log.getStackTraceString(e));
@@ -143,7 +150,7 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
                     mRecyclerView.setAdapter(new WallpapersAdapter(getActivity(), wallpapers, true, false));
 
                     if (mRecyclerView.getAdapter().getItemCount() == 0) {
-                        TextViewPadding.setPaddings(mNoFavourites, getActivity());
+                        new TextViewPadding().setPaddings(mNoFavourites, getActivity(), true);
                         mNoFavourites.setText(getResources().getString(R.string.no_favourites));
                         mNoFavourites.setVisibility(View.VISIBLE);
                     } else
@@ -154,4 +161,8 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
         }.execute();
     }
 
+    public Fragment setActivity(Activity activity) {
+        mActivity = activity;
+        return this;
+    }
 }

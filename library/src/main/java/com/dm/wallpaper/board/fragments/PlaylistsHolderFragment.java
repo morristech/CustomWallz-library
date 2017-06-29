@@ -158,9 +158,8 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
             protected Boolean doInBackground(Void... voids) {
                 while (!isCancelled()) {
                     try {
-                        Thread.sleep(1);
                         mPlaylists = Database.get(getActivity()).getPlaylists();
-                        return !(mPlaylists == null || mPlaylists.size() == 0);
+                        return true;
                     } catch (Exception e) {
                         LogUtil.e(Log.getStackTraceString(e));
                         return false;
@@ -174,6 +173,7 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
                     Collections.reverse(mPlaylists);
+                    mPlaylists.add(0, new PlaylistItem(-1, "Favourites"));
                     PlaylistWallpapersListener playlistWallpapersListener = (PlaylistWallpapersListener) getActivity();
                     adapter = new PlaylistsHolderAdapter(getActivity(), mPlaylists, true, playlistWallpapersListener, mListener);
                     mRecyclerView.setAdapter(adapter);
@@ -181,7 +181,7 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
 
 
                 if (adapter == null || adapter.getItemCount() == 0) {
-                    TextViewPadding.setPaddings(mNoPlaylists, getActivity());
+                    new TextViewPadding().setPaddings(mNoPlaylists, getActivity(), false);
                     mNoPlaylists.setVisibility(View.VISIBLE);
                 } else
                     mNoPlaylists.setVisibility(View.GONE);

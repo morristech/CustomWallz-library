@@ -9,7 +9,7 @@ import com.dm.wallpaper.board.R;
 
 public class TextViewPadding {
 
-    public static void setPaddings(TextView textView, Activity activity) {
+    public void setPaddings(TextView textView, Activity activity, boolean reducePadding) {
         int colour = activity.getResources().getColor(R.color.toolbarIcon);
         textView.setTextColor(colour);
         Point size = new Point();
@@ -17,6 +17,7 @@ public class TextViewPadding {
         TypedArray typedArray = activity.obtainStyledAttributes(new int[]{R.attr.actionBarSize});
         int actionSize = typedArray.getDimensionPixelSize(0, 0);
         typedArray.recycle();
-        textView.setPadding(30, size.y / 2 - actionSize * 3, 30, 30);
+        int multiplier = reducePadding ? 1 : 3;
+        textView.setPadding(30, size.y / 2 - actionSize * multiplier, 30, 30);
     }
 }
