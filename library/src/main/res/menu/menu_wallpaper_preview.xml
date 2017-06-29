@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_wallpaper_playlist"
         android:title="@string/menu_wallpaper_playlist"
-        android:icon="@drawable/ic_toolbar_storage"
+        android:icon="@drawable/ic_toolbar_playlist_add"
         app:showAsAction="always" />
 
     <item

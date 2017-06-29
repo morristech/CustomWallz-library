@@ -182,7 +182,7 @@ public class AvailablePlaylistsFragment extends DialogFragment {
                             .content(String.format(
                                     getContext().getResources().getString(
                                             R.string.playlist_wallpaper_added), playlistItem.getName()))
-                            .icon(R.drawable.ic_toolbar_storage)
+                            .icon(R.drawable.ic_toolbar_playlist_add)
                             .show();
 
                     dismiss();
