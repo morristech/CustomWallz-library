@@ -12,10 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.danimahardhika.android.helpers.core.ColorHelper;
-import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.android.helpers.core.ViewHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
@@ -24,6 +22,7 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
 
 import java.util.ArrayList;
@@ -58,8 +57,8 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
     RecyclerView mRecyclerView;
     @BindView(R2.id.swipe)
     SwipeRefreshLayout mSwipe;
-    @BindView(R2.id.favorite_empty)
-    ImageView mFavoriteEmpty;
+    @BindView(R2.id.empty)
+    TextView mNoFavourites;
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
 
@@ -144,15 +143,11 @@ public class FavoritesFragment extends Fragment implements WallpaperListener {
                     mRecyclerView.setAdapter(new WallpapersAdapter(getActivity(), wallpapers, true, false));
 
                     if (mRecyclerView.getAdapter().getItemCount() == 0) {
-                        int color = ColorHelper.getAttributeColor(getActivity(),
-                                android.R.attr.textColorSecondary);
-
-                        mFavoriteEmpty.setImageDrawable(
-                                DrawableHelper.getTintedDrawable(getActivity(),
-                                        R.drawable.ic_wallpaper_favorite_empty,
-                                        ColorHelper.setColorAlpha(color, 0.7f)));
-                        mFavoriteEmpty.setVisibility(View.VISIBLE);
-                    }
+                        TextViewPadding.setPaddings(mNoFavourites, getActivity());
+                        mNoFavourites.setText(getResources().getString(R.string.no_favourites));
+                        mNoFavourites.setVisibility(View.VISIBLE);
+                    } else
+                        mNoFavourites.setVisibility(View.GONE);
                 }
                 mGetWallpapers = null;
             }

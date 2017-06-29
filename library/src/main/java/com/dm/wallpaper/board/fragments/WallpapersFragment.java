@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -41,6 +41,7 @@ import com.dm.wallpaper.board.items.WallpaperJson;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.SearchListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperBoardListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
@@ -85,6 +86,8 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
     DrawMeButton mPopupBubble;
     @BindView(R2.id.progress)
     ProgressBar mProgress;
+    @BindView(R2.id.empty)
+    TextView mNoWallpapers;
 
     private WallpapersAdapter mAdapter;
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
@@ -353,6 +356,13 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                     setHasOptionsMenu(true);
                     mAdapter = new WallpapersAdapter(getActivity(), wallpapers, false, false);
                     mRecyclerView.setAdapter(mAdapter);
+
+                    if (mAdapter.getItemCount() == 0) {
+                        TextViewPadding.setPaddings(mNoWallpapers, getActivity());
+                        mNoWallpapers.setText(getResources().getString(R.string.no_wallpapers));
+                        mNoWallpapers.setVisibility(View.VISIBLE);
+                    } else
+                        mNoWallpapers.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getActivity(), R.string.connection_failed, Toast.LENGTH_LONG).show();
                 }

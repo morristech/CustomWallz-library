@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.danimahardhika.android.helpers.core.ViewHelper;
 import com.dm.wallpaper.board.R;
@@ -24,6 +25,7 @@ import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 
@@ -60,6 +62,8 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
     RecyclerView mRecyclerView;
     @BindView(R2.id.swipe)
     SwipeRefreshLayout mSwipe;
+    @BindView(R2.id.empty_tv)
+    TextView mNoPlaylists;
 
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
     private List<PlaylistItem> mPlaylists;
@@ -174,9 +178,18 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
                     adapter = new PlaylistsHolderAdapter(getActivity(), mPlaylists, true, playlistWallpapersListener, mListener);
                     mRecyclerView.setAdapter(adapter);
                 }
+
+
+                if (adapter == null || adapter.getItemCount() == 0) {
+                    TextViewPadding.setPaddings(mNoPlaylists, getActivity());
+                    mNoPlaylists.setVisibility(View.VISIBLE);
+                } else
+                    mNoPlaylists.setVisibility(View.GONE);
+
                 mGetWallpapers = null;
             }
         }.execute();
+
     }
 
     @Override
