@@ -42,10 +42,10 @@
     <string name="muzei_settings_saved">Settings Saved</string>
     <string name="muzei_wifi_only">Refresh from Wifi Only</string>
     <string name="muzei_wifi_only_desc">Load wallpaper only if device connected to wifi</string>
-    <string name="navigation_view_about">"T H E  G U N S T O R E"</string>
+    <string name="navigation_view_about">"A B O U T"</string>
     <string name="navigation_view_donate">Support Development</string>
-    <string name="navigation_view_settings">S E T U P</string>
-    <string name="navigation_view_wallpapers">"W A  L  L Z"</string>
+    <string name="navigation_view_settings">S E T T I N G S</string>
+    <string name="navigation_view_wallpapers">"W A L L Z"</string>
     <string name="open">Open</string>
     <string name="permission_storage_denied">Storage permission needed to save wallpaper</string>
     <string name="pref_data_cache">Clear Cache</string>
