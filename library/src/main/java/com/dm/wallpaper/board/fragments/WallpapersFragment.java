@@ -246,7 +246,11 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
         mAdapter.downloadLastSelectedWallpaper();
     }
 
-    void getWallpapers(boolean refreshing) {
+    private void getWallpapers(boolean refreshing) {
+        getWallpapers(refreshing, true);
+    }
+
+    public void getWallpapers(boolean refreshing, boolean showProgress) {
         final String wallpaperUrl = getActivity().getResources().getString(R.string.wallpaper_json);
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
@@ -259,8 +263,10 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
                     mSwipe.setRefreshing(true);
                     WallpaperBoardListener listener = (WallpaperBoardListener) getActivity();
                     listener.onWallpapersChecked(null);
-                } else
-                    mProgress.setVisibility(View.VISIBLE);
+                } else if (showProgress)
+                    mPopupBubble.setVisibility(View.VISIBLE);
+                else
+                    mProgress.setVisibility(View.GONE);
 
                 wallpapers = new ArrayList<>();
 

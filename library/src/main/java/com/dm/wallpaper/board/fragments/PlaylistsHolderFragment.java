@@ -141,7 +141,7 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
         super.onDestroy();
     }
 
-    private void getPlaylists() {
+    public void getPlaylists() {
         mGetWallpapers = new AsyncTask<Void, Void, Boolean>() {
 
             @Override
@@ -177,10 +177,6 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
                 mGetWallpapers = null;
             }
         }.execute();
-    }
-
-    void startPlaylists() {
-        getPlaylists();
     }
 
     @Override

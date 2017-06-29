@@ -251,7 +251,7 @@ public class Database extends SQLiteOpenHelper {
             do {
                 String name = cursor.getString(1);
                 if (includeTag != null)
-                    name = name.replace("," + includeTag, "");
+                    name = name.replace(includeTag, "");
 
                 Category category = new Category(
                         cursor.getInt(0),

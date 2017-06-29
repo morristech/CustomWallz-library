@@ -2,12 +2,15 @@ package com.dm.wallpaper.board.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ public class WallpaperPagerFragment extends Fragment {
     private ViewPager viewPager;
     private WallpaperPagerAdaptor adapter;
     private String[] pagerTitles;
+    private FragmentManager fragmentManager;
 
     public WallpaperPagerFragment() {
     }
@@ -36,7 +40,7 @@ public class WallpaperPagerFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
         FrameLayout toolbarBlankLayout = (FrameLayout) v.findViewById(R.id.toolbar_blank_layout);
         pagerTitles = getResources().getStringArray(R.array.wallpaper_fragment_pager_tab_titles);
-        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager = getChildFragmentManager();
         adapter = new WallpaperPagerAdaptor(fragmentManager);
 
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
@@ -47,7 +51,7 @@ public class WallpaperPagerFragment extends Fragment {
         params.height = params.height + WindowHelper.getStatusBarHeight(getContext());
 
 
-        tabLayout.setTabGravity(TabLayout.MODE_FIXED);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         int color = ContextCompat.getColor(getActivity(),
@@ -57,7 +61,7 @@ public class WallpaperPagerFragment extends Fragment {
         tabLayout.setSelectedTabIndicatorColor(color);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -65,11 +69,7 @@ public class WallpaperPagerFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
-                if (fragment instanceof FavoritesFragment)
-                    ((FavoritesFragment) fragment).getFavouriteWallpapers();
-                if (fragment instanceof PlaylistsHolderFragment)
-                    ((PlaylistsHolderFragment) fragment).startPlaylists();
+                refreshFragment(position);
             }
 
             @Override
@@ -77,8 +77,13 @@ public class WallpaperPagerFragment extends Fragment {
 
             }
         });
-
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        viewPager.clearOnPageChangeListeners();
+        super.onDestroy();
     }
 
     public Fragment getCurrentPagerFragment() {
@@ -143,8 +148,21 @@ public class WallpaperPagerFragment extends Fragment {
             super.destroyItem(container, position, object);
         }
 
-        private Fragment getFragment(int positon) {
-            return fragments.get(positon);
+        private Fragment getFragment(int position) {
+            return fragments.get(position);
         }
+    }
+
+    private void refreshFragment(int position) {
+        Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
+        new Handler().postDelayed(() -> {
+                if (fragment instanceof WallpapersFragment)
+                    ((WallpapersFragment) fragment).getWallpapers(false, false);
+                else if (fragment instanceof FavoritesFragment)
+                    ((FavoritesFragment) fragment).getWallpapers();
+                else if (fragment instanceof PlaylistsHolderFragment)
+                    ((PlaylistsHolderFragment) fragment).getPlaylists();
+            }, 250);
+
     }
 }
