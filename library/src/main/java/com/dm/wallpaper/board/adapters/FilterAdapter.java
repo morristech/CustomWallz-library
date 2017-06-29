@@ -45,11 +45,13 @@ public class FilterAdapter extends BaseAdapter {
     private final Context mContext;
     private final List<Category> mCategories;
     private final boolean mIsMuzei;
+    private String filterTag;
 
     public FilterAdapter(@NonNull Context context, @NonNull List<Category> categories, boolean isMuzei) {
         mContext = context;
         mCategories = categories;
         mIsMuzei = isMuzei;
+        filterTag = mContext.getResources().getString(R.string.wallpaper_filter_type_tag);
     }
 
     @Override
@@ -79,11 +81,11 @@ public class FilterAdapter extends BaseAdapter {
         }
 
         Category category = mCategories.get(position);
-        holder.title.setText(category.getName());
+        holder.title.setText(category.getName().replace(filterTag, ""));
         holder.checkBox.setChecked(mIsMuzei ?
                 category.isMuzeiSelected() :
                 category.isSelected());
-        String count = category.getCount() > 99 ? "99+" : category.getCount() +"";
+        String count = category.getCount() > 99 ? "99+" : category.getCount() + "";
         holder.counter.setText(count);
         holder.container.setOnClickListener(v -> {
             Database database = Database.get(mContext);
