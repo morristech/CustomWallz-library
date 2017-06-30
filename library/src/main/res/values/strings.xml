@@ -135,7 +135,7 @@
     <string name="google_storage_bucket">custom-wallz-d3bf6.appspot.com</string>
     <string name="muzei_art_source_desc">Your Art Source Description</string>
     <string name="muzei_art_source_name">Your Art Source Name</string>
-    <string name="navigation_view_header">https://drive.google.com/uc?id=0B7W092jdJDDObG5BdF92QWdjOXc</string>
+    <string name="navigation_view_header">nav_header</string>
     <string name="navigation_view_header_style">mini</string>
     <string name="navigation_view_header_title">DOPE AS IT GETS</string>
     <string name="splash_screen_title">"C U S T O M   W A L L Z"</string>

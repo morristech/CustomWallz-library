@@ -91,7 +91,7 @@ public class SettingsFragment extends Fragment {
         double cache = (double) FileHelper.getDirectorySize(getActivity().getCacheDir()) / FileHelper.MB;
         NumberFormat formatter = new DecimalFormat("#0.00");
 
-        settings.add(new Setting(R.drawable.ic_toolbar_playlist_add,
+        settings.add(new Setting(R.drawable.ic_storage,
                 getActivity().getResources().getString(R.string.pref_data_header),
                 "", "", "", Setting.Type.HEADER, -1));
 

@@ -25,8 +25,8 @@
         <item>Turkish</item>
     </string-array>
 	<string-array name="wallpaper_fragment_pager_tab_titles">
-        <item>ROM Wallpapers</item>
-        <item>Art Wallpapers</item>
+        <item>ROM</item>
+        <item>ART</item>
         <item>Playlists</item>
     </string-array>
 </resources>

@@ -30,7 +30,7 @@
     <color name="colorAccent">#ffff1744</color>
     <color name="colorPrimary">#ff000000</color>
     <color name="colorPrimaryDark">#ff000000</color>
-    <color name="darkColorAccent">#ff1a7eda</color>
+    <color name="darkColorAccent">#2979ff</color>
     <color name="darkColorPrimary">#ff000000</color>
     <color name="darkColorPrimaryDark">#ff000000</color>
     <color name="design_bottom_navigation_shadow_color">#14000000</color>
