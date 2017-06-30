@@ -94,6 +94,12 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        setHasOptionsMenu(false);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         resetViewBottomPadding(mRecyclerView, true);

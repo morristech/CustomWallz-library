@@ -371,4 +371,10 @@ public class WallpapersFragment extends Fragment implements WallpaperListener {
             }
         }.execute();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        setHasOptionsMenu(false);
+    }
 }

@@ -88,6 +88,12 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        setHasOptionsMenu(false);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         resetViewBottomPadding(mRecyclerView, true);
