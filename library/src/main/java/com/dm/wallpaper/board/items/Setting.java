@@ -83,6 +83,7 @@ public class Setting {
        WALLPAPER,
        LANGUAGE,
        COLORED_CARD,
-       RESET_TUTORIAL
+       RESET_TUTORIAL,
+       APPLY
    }
 }

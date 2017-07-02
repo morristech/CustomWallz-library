@@ -30,7 +30,7 @@ public class Extras {
     public static final String EXTRA_POSITION = "position";
     public static final String EXTRA_URL = "url";
     public static final String EXTRA_NAME = "name";
-    public static final String EXTRA_ID = "id";
+    public static final String EXTRA_ID = "position";
     public static final String EXTRA_AUTHOR = "author";
     public static final String EXTRA_IMAGE = "image";
     public static final String EXTRA_RESUMED = "resumed";

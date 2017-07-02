@@ -72,7 +72,7 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
     private final Context mContext;
     private final DisplayImageOptions.Builder mOptions;
     private List<Wallpaper> mWallpapers;
-    public List<Integer> mSelected;
+    public List<WallpaperIds> mSelected;
     private PlaylistWallpaperSelectedListener mListener;
 
     public PlaylistWallpapersAdapter(@NonNull Context context, @NonNull List<Wallpaper> wallpapers,
@@ -200,7 +200,7 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
             }
             if (id == R.id.container) {
                 if (mSelected.size() > 0) {
-                    selectDeselectWallpapers(position);
+                    selectDeselectWallpapers(position, mWallpapers.get(position).getName());
                 } else {
                     try {
                         final Intent intent = new Intent(mContext, WallpaperBoardPreviewActivity.class);
@@ -242,21 +242,21 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                 return false;
             }
             if (id == R.id.container) {
-                selectDeselectWallpapers(position);
+                selectDeselectWallpapers(position, mWallpapers.get(position).getName());
                 return true;
             }
             return false;
         }
 
-        private void selectDeselectWallpapers(int position) {
+        private void selectDeselectWallpapers(int position, String name) {
             if (check.getVisibility() == View.GONE) {
-                mSelected.add(position);
+                mSelected.add(new WallpaperIds(position, name));
                 check.setVisibility(View.VISIBLE);
                 mListener.showDelete();
             } else if (check.getVisibility() == View.VISIBLE) {
                 int pos = -1;
                 for (int i = 0; i <= mSelected.size(); i++) {
-                    if (mSelected.get(i) == position) {
+                    if (mSelected.get(i).position == position) {
                         pos = i;
                         break;
                     }
@@ -266,6 +266,15 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                 check.setVisibility(View.GONE);
                 mListener.showDelete();
             }
+        }
+    }
+
+    public class WallpaperIds {
+        public int position;
+        public String name;
+        WallpaperIds(int position, String name) {
+            this.position = position;
+            this.name = name;
         }
     }
 }

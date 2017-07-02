@@ -1,10 +1,12 @@
 package com.dm.wallpaper.board.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.danimahardhika.android.helpers.core.ColorHelper;
 import com.danimahardhika.android.helpers.core.DrawableHelper;
 import com.danimahardhika.android.helpers.core.FileHelper;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
+import com.dm.wallpaper.board.fragments.dialogs.AvailablePlaylistsFragment;
 import com.dm.wallpaper.board.fragments.dialogs.LanguagesFragment;
+import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.items.Setting;
 import com.dm.wallpaper.board.preferences.Preferences;
+import com.dm.wallpaper.board.services.WallpaperAutoChangeService;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.ScheduleAutoApply;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -217,6 +224,26 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Preferences.get(mContext).setTimeToShowWallpaperPreviewIntro(true);
 
                         Toast.makeText(mContext, R.string.pref_others_reset_tutorial_reset, Toast.LENGTH_LONG).show();
+                        break;
+                    case APPLY:
+                        SharedPreferences prefrences = mContext.getSharedPreferences(WallpaperAutoChangeService.TAG, Context.MODE_PRIVATE);
+                        new MaterialDialog.Builder(mContext)
+                                .typeface("Font-Medium.ttf", "Font-Regular.ttf")
+                                .content(R.string.auto_apply_content)
+                                .inputType(InputType.TYPE_CLASS_NUMBER)
+                                .input(mContext.getResources().getString(R.string.auto_apply_hint),
+                                        String.valueOf(prefrences.getLong(WallpaperAutoChangeService.INTERVAL, 0)),
+                                        false,
+                                        (dialog, input) -> {
+                                            prefrences
+                                                    .edit()
+                                                    .putLong(WallpaperAutoChangeService.INTERVAL, Long.parseLong(input.toString()))
+                                                    .apply();
+                                            Log.i("GAAH", "input callback: ");
+                                            ScheduleAutoApply.schedule(mContext);
+                                        }
+                                )
+                                .show();
                         break;
                     default:
                         break;

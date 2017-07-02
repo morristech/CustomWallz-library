@@ -1,13 +1,16 @@
 package com.dm.wallpaper.board.activities;
 
+import android.app.job.JobParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,8 +30,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,13 +60,16 @@ import com.dm.wallpaper.board.fragments.dialogs.InAppBillingFragment;
 import com.dm.wallpaper.board.helpers.InAppBillingHelper;
 import com.dm.wallpaper.board.helpers.LicenseCallbackHelper;
 import com.dm.wallpaper.board.helpers.LocaleHelper;
+import com.dm.wallpaper.board.helpers.WallpaperHelper;
 import com.dm.wallpaper.board.items.InAppBilling;
+import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
 import com.dm.wallpaper.board.receivers.WallpaperBoardReceiver;
 import com.dm.wallpaper.board.services.WallpaperBoardService;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.ImageConfig;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.ScheduleAutoApply;
 import com.dm.wallpaper.board.utils.listeners.InAppBillingListener;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
 import com.dm.wallpaper.board.utils.listeners.SearchListener;
@@ -71,11 +79,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.dm.wallpaper.board.helpers.ViewHelper.getNavigationViewHeaderStyle;
+import static com.dm.wallpaper.board.utils.Extras.EXTRA_PLAYLIST_NAME;
 
 /*
  * Wallpaper Board
@@ -174,6 +186,9 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
         if (isLicenseCheckerEnabled && !Preferences.get(this).isLicensed()) {
             finish();
         }
+
+
+        ScheduleAutoApply.schedule(getApplicationContext());
     }
 
     @Override
@@ -587,4 +602,5 @@ public class WallpaperBoardActivity extends AppCompatActivity implements Activit
     public void onFavouritesSelected() {
         setFragment(new FavoritesFragment().setActivity(this));
     }
+
 }

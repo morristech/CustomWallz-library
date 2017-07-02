@@ -31,6 +31,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_wallpaper_settings">Wallpaper Settings</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_auto_apply">Set playlist to auto apply</string>
     <string name="menu_wallpaper_playlist">Put Wallpaper in a playlist</string>
     <string name="minute">Minute</string>
     <string name="muzei_category">Select Categories</string>
@@ -54,6 +55,8 @@
     <string name="pref_data_cache_desc">Remove image cache from your storage created after loading cloud wallpaper thumbnails</string>
     <string name="pref_data_cache_size">Cache Size: %s</string>
     <string name="pref_data_header">Data &amp; Cache</string>
+    <string name="pref_auto_apply_header">Auto apply</string>
+    <string name="pref_auto_apply_desc">Automatically apply wallpapers in a set playlist every X hours</string>
     <string name="pref_language_header">Language</string>
     <string name="pref_others_header">Others</string>
     <string name="pref_others_reset_tutorial">Reset Tutorial</string>
@@ -143,6 +146,8 @@
     <string name="wallpaper_json">https://bit.ly/CustomWallz</string>
     <string name="playlists_add">Create new playlist</string>
     <string name="playlists_add_hint">New playlist name?</string>
+    <string name="auto_apply_hint">0</string>
+    <string name="auto_apply_content">Enter the number of hours to wait before applying new wallpapers from the selected playlist.</string>
     <string name="playlists_add_prefill"></string>
     <string name="playlist_wallpaper_added">Wallpaper added to playlist \"%s\"</string>
     <string name="wallpaper_playlist">Add to a playlist</string>

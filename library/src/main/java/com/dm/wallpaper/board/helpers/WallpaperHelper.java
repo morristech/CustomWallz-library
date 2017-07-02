@@ -305,15 +305,23 @@ public class WallpaperHelper {
         return scaledRectF;
     }
 
+    public static void applyWallpaper(@NonNull Context context, @Nullable RectF rect,
+                                      String url, String name) {
+        applyWallpaper(context, rect, -1, url, name);
+    }
+
     public static void applyWallpaper(@NonNull Context context, @Nullable RectF rectF,
                                       @ColorInt int color, String url, String name) {
-        final MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
-        builder.widgetColor(color)
-                .typeface("Font-Medium.ttf", "Font-Regular.ttf")
-                .progress(true, 0)
-                .progressIndeterminateStyle(true)
-                .content(R.string.wallpaper_applying);
-        final MaterialDialog dialog = builder.build();
+        MaterialDialog dialog = null;
+        if (color != -1) {
+            final MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
+            builder.widgetColor(color)
+                    .typeface("Font-Medium.ttf", "Font-Regular.ttf")
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(true)
+                    .content(R.string.wallpaper_applying);
+            dialog = builder.build();
+        }
 
         String imageUri = getWallpaperUri(context, url, name + WallpaperHelper.IMAGE_EXTENSION);
 
@@ -340,7 +348,7 @@ public class WallpaperHelper {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                if (dialog.isShowing()) return;
+                if (dialog == null || dialog.isShowing()) return;
 
                 dialog.setCancelable(false);
                 dialog.setContent(R.string.wallpaper_loading);
@@ -413,11 +421,13 @@ public class WallpaperHelper {
         final AsyncTask<Bitmap, Void, Boolean> setWallpaper = getWallpaperAsync(
                 context, dialog, rectF);
 
-        dialog.setCancelable(true);
-        dialog.setOnDismissListener(dialogInterface -> {
-            ImageLoader.getInstance().stop();
-            setWallpaper.cancel(true);
-        });
+        if (dialog != null) {
+            dialog.setCancelable(true);
+            dialog.setOnDismissListener(dialogInterface -> {
+                ImageLoader.getInstance().stop();
+                setWallpaper.cancel(true);
+            });
+        }
 
         ImageLoader.getInstance().handleSlowNetwork(true);
         ImageLoader.getInstance().loadImage(imageUri, imageSize,
@@ -437,7 +447,8 @@ public class WallpaperHelper {
                             }
                         }
 
-                        dialog.dismiss();
+                        if (dialog != null)
+                            dialog.dismiss();
                         String message = context.getResources().getString(R.string.wallpaper_apply_failed);
                         message = message +": "+ failReason.getType().toString();
                         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
@@ -446,13 +457,15 @@ public class WallpaperHelper {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         LogUtil.d("loaded bitmap: " +loadedImage.getWidth() +" x "+ loadedImage.getHeight());
-                        dialog.setContent(R.string.wallpaper_applying);
+                        if (dialog != null)
+                            dialog.setContent(R.string.wallpaper_applying);
                         setWallpaper.execute(loadedImage);
                     }
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
-                        dialog.dismiss();
+                        if (dialog != null)
+                            dialog.dismiss();
                         Toast.makeText(context, R.string.wallpaper_apply_failed,
                                 Toast.LENGTH_LONG).show();
                     }
@@ -521,6 +534,9 @@ public class WallpaperHelper {
             @Override
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
+                if (dialog == null)
+                    return;
+
                 dialog.dismiss();
                 if (aBoolean) {
                     CafeBar.builder(context)

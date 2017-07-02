@@ -1,5 +1,7 @@
 package com.dm.wallpaper.board.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,8 +26,10 @@ import com.dm.wallpaper.board.adapters.PlaylistWallpapersAdapter;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.Wallpaper;
 import com.dm.wallpaper.board.preferences.Preferences;
+import com.dm.wallpaper.board.services.WallpaperAutoChangeService;
 import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.ScheduleAutoApply;
 import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.WallpaperListener;
@@ -69,6 +73,7 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     private AsyncTask<Void, Void, Boolean> mGetWallpapers;
     private String mPlaylistName;
     private MenuItem delete;
+    private MenuItem applyPlaylist;
     private List<Wallpaper> mWallpapers;
     private PlaylistWallpapersAdapter mPlaylistWallpapersAdapter;
     private PlaylistWallpaperSelectedListener mListener;
@@ -128,11 +133,14 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_playlists_wallpapers, menu);
         delete = menu.findItem(R.id.menu_delete);
         delete.setVisible(false);
         delete.setEnabled(false);
+        applyPlaylist = menu.findItem(R.id.menu_set_playlist);
+        applyPlaylist.setVisible(false);
+        applyPlaylist.setEnabled(false);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -147,12 +155,24 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
 
             // Sorting mSelected to prevent IndexOutOfBounds as elements shift after every remove()
             Collections.sort(mPlaylistWallpapersAdapter.mSelected, Collections.reverseOrder());
-            for (int position : mPlaylistWallpapersAdapter.mSelected) {
-                db.deleteWallpaperFromPlaylist(mWallpapers.get(position).getId());
-                mWallpapers.remove(position);
-                mPlaylistWallpapersAdapter.notifyItemRemoved(position);
+            for (PlaylistWallpapersAdapter.WallpaperIds current : mPlaylistWallpapersAdapter.mSelected) {
+                db.deleteWallpaperFromPlaylist(mWallpapers.get(current.position).getId());
+                mWallpapers.remove(current.position);
+                mPlaylistWallpapersAdapter.notifyItemRemoved(current.position);
             }
             mPlaylistWallpapersAdapter.mSelected.clear();
+        } else if (id == R.id.menu_set_playlist) {
+            applyPlaylist.setVisible(false);
+            applyPlaylist.setEnabled(false);
+            Log.i("GAAH", "onOptionsItemSelected: " + mPlaylistWallpapersAdapter.mSelected.get(0).name);
+            SharedPreferences preferences = getContext().getSharedPreferences(
+                    WallpaperAutoChangeService.TAG, Context.MODE_PRIVATE);
+            preferences
+                    .edit()
+                    .putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylistWallpapersAdapter.mSelected.get(0).name)
+                    .apply();
+            ScheduleAutoApply.schedule(getContext());
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -212,12 +232,21 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     public void showDelete() {
         if (mPlaylistWallpapersAdapter == null)
             return;
+
+        if (mPlaylistWallpapersAdapter.mSelected.size() == 1) {
+        } else {
+        }
+
         if (mPlaylistWallpapersAdapter.mSelected.size() > 0) {
             delete.setVisible(true);
             delete.setEnabled(true);
+            applyPlaylist.setVisible(true);
+            applyPlaylist.setEnabled(true);
         } else {
             delete.setVisible(false);
             delete.setEnabled(false);
+            applyPlaylist.setVisible(false);
+            applyPlaylist.setEnabled(false);
         }
     }
 }

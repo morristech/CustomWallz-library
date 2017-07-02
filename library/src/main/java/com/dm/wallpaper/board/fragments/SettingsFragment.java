@@ -124,6 +124,11 @@ public class SettingsFragment extends Fragment {
                 getActivity().getResources().getString(R.string.pref_wallpaper_location),
                 directory, "", Setting.Type.WALLPAPER, -1));
 
+
+        settings.add(new Setting(-1, "",
+                getActivity().getResources().getString(R.string.pref_auto_apply_header),
+                getActivity().getResources().getString(R.string.pref_auto_apply_desc), "", Setting.Type.APPLY, -1));
+
         settings.add(new Setting(R.drawable.ic_toolbar_language,
                 getActivity().getResources().getString(R.string.pref_language_header),
                 "", "", "", Setting.Type.HEADER, -1));

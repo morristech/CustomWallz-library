@@ -45,6 +45,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <service android:name=".services.WallpaperBoardService" />
+        <service android:name=".services.WallpaperAutoChangeService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>
