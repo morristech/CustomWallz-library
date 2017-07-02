@@ -23,7 +23,7 @@ public class ScheduleAutoApply {
             return;
 
         ((JobScheduler)context.getSystemService(Context.JOB_SCHEDULER_SERVICE)).cancelAll();
-        builder.setMinimumLatency(interval);
+        builder.setMinimumLatency(interval * 1000);
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());

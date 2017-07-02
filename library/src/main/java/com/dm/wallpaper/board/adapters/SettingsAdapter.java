@@ -237,7 +237,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         (dialog, input) -> {
                                             prefrences
                                                     .edit()
-                                                    .putLong(WallpaperAutoChangeService.INTERVAL, Long.parseLong(input.toString()))
+                                                    .putLong(WallpaperAutoChangeService.INTERVAL, Long.parseLong(input.toString()) / 1000)
                                                     .apply();
                                             Log.i("GAAH", "input callback: ");
                                             ScheduleAutoApply.schedule(mContext);

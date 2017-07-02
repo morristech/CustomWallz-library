@@ -1,5 +1,7 @@
 package com.dm.wallpaper.board.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,14 +19,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.danimahardhika.android.helpers.core.ColorHelper;
 import com.danimahardhika.android.helpers.core.ViewHelper;
+import com.danimahardhika.cafebar.CafeBar;
+import com.danimahardhika.cafebar.CafeBarTheme;
 import com.dm.wallpaper.board.R;
 import com.dm.wallpaper.board.R2;
 import com.dm.wallpaper.board.adapters.PlaylistsHolderAdapter;
 import com.dm.wallpaper.board.databases.Database;
 import com.dm.wallpaper.board.items.PlaylistItem;
 import com.dm.wallpaper.board.preferences.Preferences;
+import com.dm.wallpaper.board.services.WallpaperAutoChangeService;
+import com.dm.wallpaper.board.utils.Extras;
 import com.dm.wallpaper.board.utils.LogUtil;
+import com.dm.wallpaper.board.utils.ScheduleAutoApply;
 import com.dm.wallpaper.board.utils.TextViewPadding;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpaperSelectedListener;
 import com.dm.wallpaper.board.utils.listeners.PlaylistWallpapersListener;
@@ -70,6 +78,7 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
     private PlaylistsHolderAdapter adapter;
     private PlaylistWallpaperSelectedListener mListener;
     private MenuItem delete;
+    private MenuItem applyPlaylist;
 
     @Nullable
     @Override
@@ -121,6 +130,9 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
         delete = menu.findItem(R.id.menu_delete);
         delete.setVisible(false);
         delete.setEnabled(false);
+        applyPlaylist = menu.findItem(R.id.menu_set_playlist);
+        applyPlaylist.setVisible(false);
+        applyPlaylist.setEnabled(false);
     }
 
     @Override
@@ -135,12 +147,33 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
 
             // Sorting mSelected to prevent IndexOutOfBounds as elements shift after every remove()
             Collections.sort(adapter.mSelected, Collections.reverseOrder());
-            for (int position : adapter.mSelected) {
-                db.deletePlaylist(mPlaylists.get(position).getName());
-                mPlaylists.remove(position);
-                adapter.notifyItemRemoved(position);
+            for (PlaylistsHolderAdapter.WallpaperIds current : adapter.mSelected) {
+                db.deletePlaylist(mPlaylists.get(current.position).getName());
+                mPlaylists.remove(current.position);
+                adapter.notifyItemRemoved(current.position);
             }
             adapter.mSelected.clear();
+        } else if (id == R.id.menu_set_playlist) {
+            applyPlaylist.setVisible(false);
+            applyPlaylist.setEnabled(false);
+            SharedPreferences preferences = getContext().getSharedPreferences(
+                    WallpaperAutoChangeService.TAG, Context.MODE_PRIVATE);
+            preferences
+                    .edit()
+                    .putString(Extras.EXTRA_PLAYLIST_NAME, adapter.mSelected.get(0).name)
+                    .apply();
+            ScheduleAutoApply.schedule(getContext());
+            CafeBar.builder(getContext())
+                    .theme(new CafeBarTheme.Custom(ColorHelper.getAttributeColor(
+                            getContext(), R.attr.card_background)))
+                    .fitSystemWindow()
+                    .typeface("Font-Regular.ttf", "Font-Bold.ttf")
+                    .content(String.format(
+                            getContext().getResources().getString(
+                                    R.string.auto_apply_playlist_added), adapter.mSelected.get(0).name))
+                    .icon(R.drawable.ic_toolbar_playlist_add)
+                    .show();
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -202,6 +235,14 @@ public class PlaylistsHolderFragment extends Fragment implements PlaylistWallpap
     public void showDelete() {
         if (adapter == null)
             return;
+
+        if (adapter.mSelected.size() == 1) {
+            applyPlaylist.setVisible(true);
+            applyPlaylist.setEnabled(true);
+        } else {
+            applyPlaylist.setVisible(false);
+            applyPlaylist.setEnabled(false);
+        }
         if (adapter.mSelected.size() > 0) {
             delete.setVisible(true);
             delete.setEnabled(true);

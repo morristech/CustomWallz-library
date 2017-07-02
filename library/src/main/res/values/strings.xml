@@ -150,6 +150,7 @@
     <string name="auto_apply_content">Enter the number of hours to wait before applying new wallpapers from the selected playlist.</string>
     <string name="playlists_add_prefill"></string>
     <string name="playlist_wallpaper_added">Wallpaper added to playlist \"%s\"</string>
+    <string name="auto_apply_playlist_added">Wallpapers in playlist \"%s\" will be automatically applied</string>
     <string name="wallpaper_playlist">Add to a playlist</string>
     <string name="no_wallpapers">No wallpapers in this category.</string>
     <string name="no_playlists">No playlists. Create one from the button in wallpaper previews.</string>

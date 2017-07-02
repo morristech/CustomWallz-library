@@ -146,6 +146,7 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Log.i("GAAH", "onOptionsItemSelected: " + id);
         if (id == R.id.menu_delete) {
             delete.setVisible(false);
             delete.setEnabled(false);
@@ -155,24 +156,12 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
 
             // Sorting mSelected to prevent IndexOutOfBounds as elements shift after every remove()
             Collections.sort(mPlaylistWallpapersAdapter.mSelected, Collections.reverseOrder());
-            for (PlaylistWallpapersAdapter.WallpaperIds current : mPlaylistWallpapersAdapter.mSelected) {
-                db.deleteWallpaperFromPlaylist(mWallpapers.get(current.position).getId());
-                mWallpapers.remove(current.position);
-                mPlaylistWallpapersAdapter.notifyItemRemoved(current.position);
+            for (int current : mPlaylistWallpapersAdapter.mSelected) {
+                db.deleteWallpaperFromPlaylist(mWallpapers.get(current).getId());
+                mWallpapers.remove(current);
+                mPlaylistWallpapersAdapter.notifyItemRemoved(current);
             }
             mPlaylistWallpapersAdapter.mSelected.clear();
-        } else if (id == R.id.menu_set_playlist) {
-            applyPlaylist.setVisible(false);
-            applyPlaylist.setEnabled(false);
-            Log.i("GAAH", "onOptionsItemSelected: " + mPlaylistWallpapersAdapter.mSelected.get(0).name);
-            SharedPreferences preferences = getContext().getSharedPreferences(
-                    WallpaperAutoChangeService.TAG, Context.MODE_PRIVATE);
-            preferences
-                    .edit()
-                    .putString(Extras.EXTRA_PLAYLIST_NAME, mPlaylistWallpapersAdapter.mSelected.get(0).name)
-                    .apply();
-            ScheduleAutoApply.schedule(getContext());
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -233,20 +222,12 @@ public class PlaylistWallpapersFragment extends Fragment implements WallpaperLis
         if (mPlaylistWallpapersAdapter == null)
             return;
 
-        if (mPlaylistWallpapersAdapter.mSelected.size() == 1) {
-        } else {
-        }
-
         if (mPlaylistWallpapersAdapter.mSelected.size() > 0) {
             delete.setVisible(true);
             delete.setEnabled(true);
-            applyPlaylist.setVisible(true);
-            applyPlaylist.setEnabled(true);
         } else {
             delete.setVisible(false);
             delete.setEnabled(false);
-            applyPlaylist.setVisible(false);
-            applyPlaylist.setEnabled(false);
         }
     }
 }

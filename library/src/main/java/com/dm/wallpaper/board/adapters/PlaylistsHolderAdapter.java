@@ -72,7 +72,7 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
     private List<PlaylistItem> mPlaylists;
     private List<PlaylistItem> mPlaylistsAll;
     private PlaylistWallpapersListener mPlaylistWallpapersListener;
-    public List<Integer> mSelected;
+    public List<WallpaperIds> mSelected;
     private PlaylistWallpaperSelectedListener mSelectedListener;
 
     private Database db;
@@ -252,13 +252,13 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
                 return;
 
             if (check.getVisibility() == View.GONE) {
-                mSelected.add(position);
+                mSelected.add(new WallpaperIds(position, mPlaylists.get(position).getName()));
                 check.setVisibility(View.VISIBLE);
                 mSelectedListener.showDelete();
             } else if (check.getVisibility() == View.VISIBLE) {
                 int pos = -1;
                 for (int i = 0; i <= mSelected.size(); i++) {
-                    if (mSelected.get(i) == position) {
+                    if (mSelected.get(i).position == position) {
                         pos = i;
                         break;
                     }
@@ -286,4 +286,15 @@ public class PlaylistsHolderAdapter extends RecyclerView.Adapter<PlaylistsHolder
         }
         notifyDataSetChanged();
     }
+
+
+    public class WallpaperIds {
+        public int position;
+        public String name;
+        WallpaperIds(int position, String name) {
+            this.position = position;
+            this.name = name;
+        }
+    }
+
 }

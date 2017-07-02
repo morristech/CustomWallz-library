@@ -12,6 +12,6 @@
         android:id="@+id/menu_set_playlist"
         android:icon="@drawable/ic_toolbar_playlist_add"
         android:title="@string/menu_auto_apply"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>
