@@ -118,7 +118,7 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
                         super.onLoadingStarted(imageUri, view);
-                        if (false) {
+                        if (Preferences.get(mContext).isColoredWallpapersCard()) {
                             int vibrant = ColorHelper.getAttributeColor(
                                     mContext, R.attr.card_background);
                             holder.card.setCardBackgroundColor(vibrant);
@@ -132,7 +132,7 @@ public class PlaylistWallpapersAdapter extends RecyclerView.Adapter<PlaylistWall
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         super.onLoadingComplete(imageUri, view, loadedImage);
-                        if (false) {
+                        if (Preferences.get(mContext).isColoredWallpapersCard()) {
                             if (loadedImage != null) {
                                 Palette.from(loadedImage).generate(palette -> {
                                     int vibrant = ColorHelper.getAttributeColor(
