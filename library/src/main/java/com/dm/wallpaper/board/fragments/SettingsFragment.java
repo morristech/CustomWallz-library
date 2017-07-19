@@ -143,10 +143,6 @@ public class SettingsFragment extends Fragment {
                 "", "", "", Setting.Type.HEADER, -1));
 
         settings.add(new Setting(-1, "",
-                getActivity().getResources().getString(R.string.pref_others_colored_wallpaper_card),
-                "", "", Setting.Type.COLORED_CARD, Preferences.get(getActivity()).isColoredWallpapersCard() ? 1 : 0));
-
-        settings.add(new Setting(-1, "",
                 getActivity().getResources().getString(R.string.pref_others_reset_tutorial),
                 "", "", Setting.Type.RESET_TUTORIAL, -1));
 
